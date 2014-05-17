@@ -1,2 +1,2 @@
-sunlight_smartbook
-==================
+smartbook
+=========
