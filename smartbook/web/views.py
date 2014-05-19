@@ -185,6 +185,8 @@ class RegisterUser(View):
                         return render(request, template, context)
                     else:                        
                         user.set_password(request.POST['password'])
+                        user.email = request.POST['email']
+                        user.first_name = request.POST['name']
                         user.save()
                         designation, created = Designation.objects.get_or_create(title=request.POST['designation'])
                         staff = Staff()
