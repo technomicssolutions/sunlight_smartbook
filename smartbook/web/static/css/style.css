@@ -143,6 +143,45 @@ body {
 	color: #235580;
 	text-decoration: none;
 }
+
+/*sub sub menu*/
+.menu_div ul li ul li{
+	float: left;
+	display: block;
+	padding: 2px 10px 2px 5px;
+	position: relative;
+	width: 100%;
+}
+.menu_div ul li ul li ul li {
+	float: none;
+	display: block;
+	padding: 3px 5px 0px 5px;
+	border: none;	
+	height: 30px;
+	min-width: 100px;
+}
+.menu_div ul li ul li ul{
+	position: absolute;
+	z-index: 1;
+	margin: 0px;
+	padding: 5px;
+	background-color: #ADD8E6;
+	min-width: 150px;
+	display: none;
+}
+
+.menu_div ul li ul li:hover ul.sub_submenu{
+    display: block;
+    margin-left: 115px;
+    margin-top: -28px;
+}
+ul.sub_submenu li {
+	display: block;
+}
+ul.sub_submenu li a {
+	display: block;
+}
+
 .last {
 	border: none !important;
 }
@@ -809,4 +848,12 @@ a {
 
 #edit_delivery_note .purchase_item_list .item_list_row span {
     width: 10.5%;
+}
+
+#print_quotation .purchase_item_list .item_list_row span {
+    width: 12.5%;
+}
+
+#print_delivery_note .purchase_item_list .item_list_row span {
+    width: 12.5%;
 }

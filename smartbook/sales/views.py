@@ -755,10 +755,12 @@ class QuotationDetails(View):
         
         in_sales_invoice_creation = ''
         sales_invoice_creation = request.GET.get('sales_invoice', '')
-
+        whole_quotations = request.GET.get('whole_quotations', '')
         ref_number = request.GET.get('reference_no', '')
         if sales_invoice_creation == 'true':
             quotations = Quotation.objects.filter(reference_id__istartswith=ref_number, is_sales_invoice_created=False)
+        elif whole_quotations == 'true':
+            quotations = Quotation.objects.all()
         else:
             quotations = Quotation.objects.filter(reference_id__istartswith=ref_number, processed=False, is_sales_invoice_created=False)
         quotation_list = []
@@ -806,6 +808,7 @@ class QuotationDetails(View):
                     })
                     i = i + 1
             quotation_list.append({
+                'quotation_id': quotation.id,
                 'date': quotation.date.strftime('%d/%m/%Y') if quotation.date else '',
                 'delivery': quotation.delivery,
                 'proof': quotation.proof,
@@ -834,7 +837,11 @@ class DeliveryNoteDetails(View):
 
         delivery_no = request.GET.get('delivery_no', '')
 
-        delivery_note_details = DeliveryNote.objects.filter(delivery_note_number__istartswith=delivery_no, processed=False)
+        whole_delivery_notes = request.GET.get('whole_delivery_notes', '')
+        if whole_delivery_notes == 'true':
+            delivery_note_details = DeliveryNote.objects.all()
+        else:
+            delivery_note_details = DeliveryNote.objects.filter(delivery_note_number__istartswith=delivery_no, processed=False)
         
         delivery_note_list = []
         net_total = 0
@@ -888,6 +895,7 @@ class DeliveryNoteDetails(View):
                 'delivery_no': delivery_note.delivery_note_number,
                 'lpo_number': delivery_note.lpo_number if delivery_note.lpo_number else '',
                 'date': delivery_note.date.strftime('%d/%m/%Y'),
+                'delivery_note_id': delivery_note.id,
             })
         res = {
             'delivery_notes': delivery_note_list,
@@ -1670,9 +1678,7 @@ class EditDeliveryNote(View):
             delivery_note.save()
 
             if delivery_note.quotation:
-                print "in if"
                 quotation = delivery_note.quotation
-                print quotation
                 for d_item in delivery_note.quotation.quotationitem_set.all():
                     q_stored_item_names.append(d_item.item.name)
                 
@@ -1766,6 +1772,16 @@ class EditDeliveryNote(View):
 
             return HttpResponse(response, status=200, mimetype='application/json')
 
-    
+class PrintQuotation(View):
 
+    def get(self, request, *args, **kwargs):
+
+        return render(request, 'sales/print_quotation.html', {})
+
+    
+class PrintDeliveryNote(View):
+
+    def get(self, request, *args, **kwargs):
+
+        return render(request, 'sales/print_delivery_note.html', {})
 

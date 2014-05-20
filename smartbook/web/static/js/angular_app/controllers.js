@@ -59,7 +59,7 @@ add_new_customer = function($http, $scope) {
 }       
 get_quotation_details = function($http, $scope, from){
 
-    if (from == 'edit_quotation') {
+    if (from == 'edit_quotation' || from == 'whole_quotations') {
         var ref_no = $scope.ref_no;
     } else {
         var ref_no = $scope.quotation_no;
@@ -68,6 +68,8 @@ get_quotation_details = function($http, $scope, from){
     var url = '';
     if (from == 'quotation') {
         url = '/sales/quotation_details/?reference_no='+ref_no+'&sales_invoice=true';
+    } else if (from == 'whole_quotations') {
+        url = '/sales/quotation_details/?reference_no='+ref_no+'&whole_quotations=true'
     } else {
         url = '/sales/quotation_details/?reference_no='+ref_no;
     }
@@ -86,6 +88,31 @@ get_quotation_details = function($http, $scope, from){
         console.log(data || "Request failed");
     });
 }
+
+get_delivery_note_details = function($http, $scope, from, delivery_no){
+
+        $scope.delivery_notes = []
+        if (from == 'whole_delivery_notes') {
+            url = '/sales/delivery_note_details/?delivery_no='+delivery_no+'&whole_delivery_notes=true';
+        } else {
+            url = '/sales/delivery_note_details/?delivery_no='+delivery_no;
+        }
+        $http.get(url).success(function(data)
+        {
+            if(data.delivery_notes.length > 0){
+                $scope.dn_message = ''
+                $scope.selecting_delivery_note = true;
+                $scope.delivery_note_selected = false;
+                $scope.delivery_notes = data.delivery_notes; 
+            } else {
+                $scope.dn_message = "There is no delivery note with this number";
+            }
+            
+        }).error(function(data, status)
+        {
+            console.log(data || "Request failed");
+        });
+    }
 
 
 function ExpenseController($scope, $element, $http, $timeout, $location) {
@@ -1035,22 +1062,7 @@ function SalesQNDNController($scope, $element, $http, $timeout, share, $location
 
     $scope.get_delivery_note_details = function(){
 
-        var delivery_no = $scope.delivery_no;
-        $scope.delivery_notes = []
-        $http.get('/sales/delivery_note_details/?delivery_no='+delivery_no).success(function(data)
-        {
-            if(data.delivery_notes.length > 0){
-               $scope.selecting_delivery_note = true;
-                $scope.delivery_note_selected = false;
-                $scope.delivery_notes = data.delivery_notes; 
-            } else {
-                $scope.dn_message = "There is no delivery note with this number";
-            }
-            
-        }).error(function(data, status)
-        {
-            console.log(data || "Request failed");
-        });
+        get_delivery_note_details($http, $scope, 'sales', $scope.delivery_no);
     }
 
     $scope.get_latest_sales_details = function(item) {
@@ -3824,13 +3836,6 @@ function EditQuotationController($scope, $element, $http, $timeout, share, $loca
         $scope.csrf_token = csrf_token;
         $scope.popup = '';            
     }
-
-    $scope.items = [];
-    $scope.selected_item = '';
-    $scope.selecting_item = false;
-    $scope.item_selected = false;
-    $scope.sales_items = [];
-    
     $scope.getItems = function(parameter){
 
         if(parameter == 'item_code')
@@ -4058,10 +4063,6 @@ function EditDeliveryController($scope, $element, $http, $timeout, share, $locat
     {
         $scope.csrf_token = csrf_token;
     }
-    $scope.items = [];
-    $scope.selected_item = '';
-    $scope.selecting_item = false;
-    $scope.item_selected = false;
     $scope.sales_items = [];
     
     $scope.getItems = function(parameter){
@@ -4143,23 +4144,8 @@ function EditDeliveryController($scope, $element, $http, $timeout, share, $locat
     }
 
     $scope.get_delivery_note_details = function(){
-        var delivery_no = $scope.delivery_note_no;
-        $scope.delivery_notes = []
-        $http.get('/sales/delivery_note_details/?delivery_no='+delivery_no).success(function(data)
-        {
-            if(data.delivery_notes.length > 0){
-                $scope.dn_message = '';
-                $scope.selecting_delivery_note = true;
-                $scope.delivery_note_selected = false;
-                $scope.delivery_notes = data.delivery_notes; 
-            } else {
-                $scope.dn_message = "There is no delivery note with this number";
-            }
-            
-        }).error(function(data, status)
-        {
-            console.log(data || "Request failed");
-        });
+        
+        get_delivery_note_details($http, $scope, 'delivery_note', $scope.delivery_note_no);
     }
 
     $scope.delivery_note_validation = function(){
@@ -4211,11 +4197,7 @@ function EditDeliveryController($scope, $element, $http, $timeout, share, $locat
                     'unit_cost':0,
                     'net_amount': delivery_note.items[i].net_amount,
                 }
-                // $scope.calculate_tax_amount_sale(selected_item);
-                // $scope.calculate_discount_amount_sale(selected_item);
-                // $scope.calculate_unit_cost_sale(selected_item);
                 $scope.delivery_note.sales_items.push(selected_item);
-                // $scope.calculate_grant_total_sale();
                 $scope.calculate_net_total_amount();
                 
             }
@@ -4482,6 +4464,167 @@ function EditItemController($scope, $http, $element, $location, $timeout) {
     }
     $scope.close_popup = function(){
         $scope.popup.hide_popup();
+    }
+}
+
+function PrintQuotationController($scope, $http, $location, $element) {
+    $scope.items = [];
+    $scope.selected_item = '';
+    $scope.customer = '';
+    $scope.selecting_item = false;
+    $scope.item_selected = false;
+    $scope.quotation = {
+        'sales_items': [],
+        'date': '',
+        'customer':'',
+        'net_total': 0,
+        'reference_no': '',
+        'attention': '',
+        'subject': '',
+        'total_amount': '',
+        'proof': '',
+        'validity': '',
+        'delivery': '',
+        'payment': '',
+        'quotation_id': '',
+    }
+
+    $scope.init = function(csrf_token) {
+        $scope.csrf_token = csrf_token;
+    }
+
+    $scope.get_quotation_details = function(){
+        get_quotation_details($http, $scope, 'whole_quotations');
+    }
+
+    $scope.add_quotation = function(quotation) {
+        $scope.selecting_quotation = false;
+        $scope.quotation_selected = true;
+        $scope.item_select_error = '';
+        $scope.quotation.sales_items = []
+        $scope.ref_no = quotation.ref_no; 
+        $scope.quotation.reference_no = $scope.ref_no;
+        $scope.quotation.customer = quotation.customer; 
+        $scope.quotation.net_total = quotation.net_total;
+        $scope.quotation.delivery = quotation.delivery;
+        $scope.quotation.validity = quotation.validity;
+        $scope.quotation.subject = quotation.subject;
+        $scope.quotation.payment = quotation.payment;
+        $scope.quotation.date = quotation.date;
+        $scope.quotation.proof = quotation.proof;
+        $scope.quotation.attention = quotation.attention;
+        $scope.quotation.quotation_id = quotation.quotation_id;
+        if(quotation.items.length > 0){
+            for(var i=0; i< quotation.items.length; i++){
+                var selected_item = {
+                    'sl_no': quotation.items[i].sl_no,
+                    'item_code': quotation.items[i].item_code,
+                    'item_name': quotation.items[i].item_name,
+                    'barcode': quotation.items[i].barcode,
+                    'item_description': quotation.items[i].item_description,
+                    'qty_sold': quotation.items[i].qty_sold,
+                    'current_stock': quotation.items[i].current_stock,
+                    'uom': quotation.items[i].uom,
+                    'unit_price': quotation.items[i].selling_price,
+                    'discount_permit': quotation.items[i].discount_permit,
+                    'tax': quotation.items[i].tax,
+                    'tax_amount': 0,
+                    'discount_permit_amount':0,
+                    'disc_given': quotation.items[i].discount_given,
+                    'unit_cost':0,
+                    'net_amount': quotation.items[i].net_amount,
+                }
+               
+                $scope.quotation.sales_items.push(selected_item);
+                
+            }
+        }
+    }
+    $scope.print_quotation = function() {
+        if ($scope.quotation.quotation_id == '') {
+            $scope.message = "Please Enter REference No";
+        } else {
+            $scope.message = '';
+            document.location.href = '/sales/create_quotation_pdf/'+$scope.quotation.quotation_id+'/';
+        }
+    }
+}
+
+function PrintDeliveryNoteController($scope, $http, $location, $element) {
+    $scope.items = [];
+    $scope.selected_item = '';
+    $scope.selecting_item = false;
+    $scope.item_selected = false;
+    $scope.customer_name = '';
+    $scope.delivery_note = {
+        'sales_items': [],
+        'date': '',
+        'customer':'',
+        'net_total': 0,
+        'total_amount': '',
+        'delivery_note_no': '',
+        'lpo_no': '',
+        'ref_no': '',
+        'delivery_note_id': '',
+    }
+    $scope.init = function(csrf_token, sales_invoice_number)
+    {
+        $scope.csrf_token = csrf_token;
+    }
+    $scope.sales_items = [];
+
+    $scope.get_delivery_note_details = function(){
+        get_delivery_note_details($http, $scope, 'whole_delivery_notes', $scope.delivery_note_no);
+    }
+
+    $scope.add_delivery_note = function(delivery_note) {
+        $scope.selecting_delivery_note = false;
+        $scope.delivery_note_selected = true;
+        $scope.item_select_error = '';
+        $scope.delivery_note.sales_items = []
+        $scope.quotation_no = delivery_note.ref_no; 
+        $scope.delivery_note_no = delivery_note.delivery_no;
+        $scope.delivery_note.ref_no = $scope.quotation_no;
+        $scope.delivery_note.delivery_note_no = delivery_note.delivery_no;
+        $scope.delivery_note.customer = delivery_note.customer; 
+        $scope.delivery_note.net_total = delivery_note.net_total;
+        $scope.delivery_note.lpo_no = delivery_note.lpo_number;
+        $scope.delivery_note.date = delivery_note.date;
+        $scope.delivery_note.delivery_note_id = delivery_note.delivery_note_id;
+        if(delivery_note.items.length > 0){
+            for(var i=0; i< delivery_note.items.length; i++){
+                var selected_item = {
+                    'sl_no': delivery_note.items[i].sl_no,
+                    'item_code': delivery_note.items[i].item_code,
+                    'item_name': delivery_note.items[i].item_name,
+                    'barcode': delivery_note.items[i].barcode,
+                    'item_description': delivery_note.items[i].item_description,
+                    'qty_sold': delivery_note.items[i].qty_sold,
+                    'current_stock': delivery_note.items[i].current_stock,
+                    'uom': delivery_note.items[i].uom,
+                    'unit_price': delivery_note.items[i].selling_price,
+                    'discount_permit': delivery_note.items[i].discount_permit,
+                    'tax': delivery_note.items[i].tax,
+                    'tax_amount': 0,
+                    'discount_permit_amount':0,
+                    'disc_given': delivery_note.items[i].discount_given,
+                    'unit_cost':0,
+                    'net_amount': delivery_note.items[i].net_amount,
+                }
+                $scope.delivery_note.sales_items.push(selected_item);
+            }
+        }
+    }
+    
+    $scope.print_deliverynote = function() {
+        if ($scope.delivery_note.delivery_note_id == '') {
+            $scope.dn_message = "Please Enter delivery note no";
+        } else {
+
+            $scope.dn_message = '';
+               
+            document.location.href = '/sales/delivery_note_pdf/'+$scope.delivery_note.delivery_note_id+'/';
+        }
     }
 }
 
