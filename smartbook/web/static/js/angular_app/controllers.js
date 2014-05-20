@@ -120,20 +120,20 @@ search_item = function($location, $scope, $http) {
     $scope.is_item = false;
     $scope.is_customer = false;
     var search_url = ''
-    if ($scope.item_name != undefined ) {
-        console.log('hii in if ');
+    if ($scope.item_name != undefined || $scope.item_name != ' ' || $scope.item_name != '' || $scope.item_name != null) {
         var search_url = '/inventory/item/search/?item_name='+$scope.item_name; 
     } else if ($scope.name_of_customer != undefined){
-        console.log('in else');
         $scope.item_name = undefined;
         var search_url = '/customer/search/?customer='+$scope.name_of_customer;
+    } else {
+        $scope.errormessage = 'Please enter item or customer to search';
     }
-    if ($scope.item_name != undefined || $scope.name_of_customer != undefined) {
+    if ($scope.item_name != undefined || $scope.name_of_customer != undefined || $scope.item_name != ' ' || $scope.item_name != '' || $scope.item_name != null) {
         $http.get(search_url).success(function(data) {
-            if(data.result == 'error'){
-                console.log(data.search_results); 
-                $scope.errormessage = 'No data available';
+            if(data.result != 'ok'){
+                $scope.errormessage = 'Please enter item or customer to search';
             } else {
+                $scope.errormessage = '';
                 var height = $(document).height();
                 $scope.search_popup = new DialogueModelWindow({
                     'dialogue_popup_width': '27%',
@@ -158,6 +158,7 @@ search_item = function($location, $scope, $http) {
             
         }).error(function(data, status)
         {
+            $scope.errormessage = 'No data availbale';
             console.log(data || "Request failed");
         });
     }

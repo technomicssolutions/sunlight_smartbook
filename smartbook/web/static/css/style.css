@@ -889,3 +889,7 @@ a {
 #search_results_table {
 	width: 95% !important;
 }
+#search_error {
+    height: 27px;
+    width: 100%;
+}
