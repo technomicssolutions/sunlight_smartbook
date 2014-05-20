@@ -195,6 +195,16 @@ search_item = function($location, $scope, $http) {
 }
 
 
+function HomeController($scope, $location, $element, $http) {
+    $scope.init = function(csrf_token) {
+        $scope.csrf_token = csrf_token;
+    }
+    $scope.search_item = function(){
+        search_item($location, $scope, $http);
+    }
+    
+}
+
 function ExpenseController($scope, $element, $http, $timeout, $location) {
 
 	$scope.expense_heads = [];
