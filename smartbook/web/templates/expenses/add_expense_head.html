@@ -4,6 +4,12 @@
 
 {% block title %}New Expense Head{% endblock title %}
 
+{% block controller %}ng-controller="HomeController" ng-init="init('{{csrf_token}}')"{% endblock controller %}
+
+{% block dialogue_popup %}
+	{% include 'search.html' %}
+{% endblock %}
+
 {% block content %}
 	<div class="expense_form_container">
 		<form class="add_expense_head" name="add_expense_head" method="post" action="{% url 'new_expense_head' %}">{% csrf_token %}

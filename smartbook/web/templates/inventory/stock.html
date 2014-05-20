@@ -1,6 +1,13 @@
 {% extends 'base.html' %}
 {% block title %}Add Item{% endblock title %}
 {% block body_id %}add_item{% endblock %}
+
+{% block controller %}ng-controller="HomeController" ng-init="init('{{csrf_token}}')"{% endblock controller %}
+
+{% block dialogue_popup %}
+	{% include 'search.html' %}
+{% endblock %}
+
 {% block content %}
 
 <div id="main-title">

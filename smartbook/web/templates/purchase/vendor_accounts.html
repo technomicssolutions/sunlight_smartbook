@@ -4,6 +4,11 @@
 
 {% block title %}Vendor Accounts{% endblock title %}
 {% block controller %}ng-controller="VendorAccountController" ng-init="init('{{csrf_token}}')" {% endblock controller %}
+
+{% block dialogue_popup %}
+	{% include 'search.html' %}
+{% endblock %}
+
 {% block content %}
 
 	<div id="main-title">
