@@ -11,6 +11,7 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
+from django.db.models import Q
 
 from inventory.models import *
 
@@ -361,7 +362,7 @@ class ItemSearch(View):
             item_name = request.GET.get('item_name', '')
             items = []
             if item_name:
-                items = Item.objects.filter(name__istartswith=item_name)
+                items = Item.objects.filter(Q(name__istartswith=item_name)| Q(code__icontains=item_name) )
             ctx_search_result = []
             if len(items) > 0:
 
