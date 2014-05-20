@@ -154,6 +154,8 @@ search_item = function($location, $scope, $http) {
                 $scope.errormessage = 'Please enter customer to search';
                 var search_url = '';
             } else {
+                $scope.is_customer = true;
+                $scope.is_item = false;
                 var search_url = '/customer/search/?customer='+$scope.name_of_customer;
             } 
         } 
