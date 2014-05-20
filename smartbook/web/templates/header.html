@@ -92,8 +92,9 @@
 		{% if user.is_authenticated %}
 			<ul>
 				<li><input type="text" ng-model="name_of_item" placeholder="Item name/ Item code"></li>
+				<li class="last"><a href="" class="btn btn-info" ng-click="search_item()">Search</a></li>
 				<li><input type="text" ng-model="name_of_customer" placeholder="Customer"></li>
-				<li class="last"><a href="" ng-click="search_item()">Search</a></li>
+				<li class="last"><a href="" class="btn btn-info" ng-click="search_customer()">Search</a></li>
 				<li><p class="error_message" id="search_error">[[errormessage]]</p></li>
 			</ul>
 		{% endif %}

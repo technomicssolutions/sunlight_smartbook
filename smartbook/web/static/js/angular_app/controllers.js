@@ -123,51 +123,28 @@ search_item = function($location, $scope, $http) {
     var search_url = '';
 
 
-    if ($scope.name_of_item == undefined && $scope.name_of_customer == undefined) {
-        $scope.errormessage = 'Please enter item or customer to search';
+    if ($scope.name_of_item == undefined) {
+        $scope.errormessage = 'Please enter item to search';
     } else {
 
         if ($scope.name_of_item != undefined) {
-            console.log($scope.name_of_item.length);
             if ($scope.name_of_item.length == 0) {
-                console.log('hiii');
-                $scope.errormessage = 'Please enter item or customer to search';
+                $scope.errormessage = 'Please enter item to search';
                 var search_url = '';
-                if($scope.name_of_customer != undefined){
-                    if ($scope.name_of_customer.length == 0) {
-                        $scope.errormessage = 'Please enter customer to search';
-                        var search_url = '';
-                    } else {
-                        $scope.is_customer = true;
-                        $scope.is_item = false;
-                        var search_url = '/customer/search/?customer='+$scope.name_of_customer;
-                    } 
-                } 
             } else {
                 $scope.is_item = true;
                 $scope.is_customer = false;
                 var search_url = '/inventory/item/search/?item_name='+$scope.name_of_item; 
             } 
-            
-        } else if($scope.name_of_customer != undefined){
-            if ($scope.name_of_customer.length == 0) {
-                $scope.errormessage = 'Please enter customer to search';
-                var search_url = '';
-            } else {
-                $scope.is_customer = true;
-                $scope.is_item = false;
-                var search_url = '/customer/search/?customer='+$scope.name_of_customer;
-            } 
         } 
-        
         $http.get(search_url).success(function(data) {
             if(data.result != 'ok'){
-                $scope.errormessage = 'Please enter item or customer to search';
+                $scope.errormessage = 'No item with data available';
             } else {
                 $scope.errormessage = '';
                 var height = $(document).height();
                 $scope.search_popup = new DialogueModelWindow({
-                    'dialogue_popup_width': '37%',
+                    'dialogue_popup_width': '47%',
                     'message_padding': '0px',
                     'left': '28%',
                     'top': '175px',
@@ -190,10 +167,51 @@ search_item = function($location, $scope, $http) {
             
         }).error(function(data, status)
         {
-            $scope.errormessage = 'No data availbale';
+            $scope.errormessage = 'No item with data available';
             console.log(data || "Request failed");
         });
     }
+}
+
+search_customer = function($location, $scope, $http) {
+    
+    if($scope.name_of_customer != undefined){
+        if ($scope.name_of_customer.length == 0) {
+            $scope.errormessage = 'Please enter customer to search';
+            var search_url = '';
+        } else {
+            $scope.is_customer = true;
+            $scope.is_item = false;
+            var search_url = '/customer/search/?customer='+$scope.name_of_customer;
+        } 
+    } 
+    
+    $http.get(search_url).success(function(data) {
+        if(data.result != 'ok'){
+            $scope.errormessage = 'Please enter customer to search';
+        } else {
+            $scope.errormessage = '';
+            var height = $(document).height();
+            $scope.search_popup = new DialogueModelWindow({
+                'dialogue_popup_width': '27%',
+                'message_padding': '0px',
+                'left': '28%',
+                'top': '175px',
+                'height': 'auto',
+                'content_div': '#search_result'
+            });
+            $scope.search_popup.set_overlay_height(height);
+            $scope.search_popup.show_content();
+            if ($scope.name_of_customer != undefined) {
+                $scope.customers = data.search_results;
+            }
+        }
+        
+    }).error(function(data, status)
+    {
+        $scope.errormessage = 'No data available';
+        console.log(data || "Request failed");
+    });
 }
 
 
@@ -203,6 +221,9 @@ function HomeController($scope, $location, $element, $http) {
     }
     $scope.search_item = function(){
         search_item($location, $scope, $http);
+    }
+    $scope.search_customer = function() {
+        search_customer($location, $scope, $http);
     }
 
 }
@@ -237,6 +258,9 @@ function ExpenseController($scope, $element, $http, $timeout, $location) {
 
     $scope.search_item = function(){
         search_item($location, $scope, $http);
+    }
+    $scope.search_customer = function() {
+        search_customer($location, $scope, $http);
     }
     
     $scope.payment_mode_change = function(payment_mode) {
@@ -373,6 +397,9 @@ function AddEditUserController($scope, $element, $http, $timeout, $location) {
     $scope.search_item = function(){
         search_item($location, $scope, $http);
     }
+    $scope.search_customer = function() {
+        search_customer($location, $scope, $http);
+    }
     $scope.add_designation = function() {
         if($scope.designation == 'other') {
             $scope.popup = new DialogueModelWindow({
@@ -495,6 +522,10 @@ function PurchaseController($scope, $element, $http, $timeout, share, $location)
 
     $scope.search_item = function(){
         search_item($location, $scope, $http);
+    }
+
+    $scope.search_customer = function() {
+        search_customer($location, $scope, $http);
     }
 
     $scope.get_vendors = function() {
@@ -1166,6 +1197,9 @@ function SalesQNDNController($scope, $element, $http, $timeout, share, $location
     $scope.search_item = function(){
         search_item($location, $scope, $http);
     }
+    $scope.search_customer = function() {
+        search_customer($location, $scope, $http);
+    }
     $scope.get_delivery_note_details = function(){
 
         get_delivery_note_details($http, $scope, 'sales', $scope.delivery_no);
@@ -1456,6 +1490,9 @@ function SalesController($scope, $element, $http, $timeout, share, $location) {
     }
     $scope.search_item = function(){
         search_item($location, $scope, $http);
+    }
+    $scope.search_customer = function() {
+        search_customer($location, $scope, $http);
     }
     $scope.validate_sales = function() {
         $scope.sales.customer = $scope.customer;
@@ -1805,6 +1842,9 @@ function DailyReportController($scope, $element, $http, $timeout, $location){
     $scope.search_item = function(){
         search_item($location, $scope, $http);
     }
+    $scope.search_customer = function() {
+        search_customer($location, $scope, $http);
+    }
 }
 
 function VendorAccountController($scope, $element, $http, $timeout, $location){  
@@ -1839,6 +1879,10 @@ function VendorAccountController($scope, $element, $http, $timeout, $location){
 
     $scope.search_item = function(){
         search_item($location, $scope, $http);
+    }
+
+    $scope.search_customer = function() {
+        search_customer($location, $scope, $http);
     }
 
     $scope.select_payment_mode = function(){
@@ -2003,7 +2047,10 @@ function PurchaseReportController($scope, $element, $http, $location) {
 
     $scope.search_item = function(){
         search_item($location, $scope, $http);
-    }    
+    }  
+    $scope.search_customer = function() {
+        search_customer($location, $scope, $http);
+    }  
 }
 
 function ExpenseReportController($scope, $http, $element, $timeout, $location){
@@ -2029,6 +2076,10 @@ function ExpenseReportController($scope, $http, $element, $timeout, $location){
 
     $scope.search_item = function(){
         search_item($location, $scope, $http);
+    }
+
+    $scope.search_customer = function() {
+        search_customer($location, $scope, $http);
     }
     
 }
@@ -2083,7 +2134,11 @@ function VendorAccountReportController($scope, $element, $http, $location) {
 
     $scope.search_item = function(){
         search_item($location, $scope, $http);
-    }    
+    } 
+
+    $scope.search_customer = function() {
+        search_customer($location, $scope, $http);
+    }   
 }
 
 function PurchaseReturnReportController($scope, $element, $http, $location) {
@@ -2142,6 +2197,10 @@ function PurchaseReturnReportController($scope, $element, $http, $location) {
     $scope.search_item = function(){
         search_item($location, $scope, $http);
     }
+
+    $scope.search_customer = function() {
+        search_customer($location, $scope, $http);
+    }
    
 }
 
@@ -2162,6 +2221,10 @@ function StockReportController($scope, $element, $http, $timeout, $location) {
 
     $scope.search_item = function(){
         search_item($location, $scope, $http);
+    }
+
+    $scope.search_customer = function() {
+        search_customer($location, $scope, $http);
     }
 }
 
@@ -2203,6 +2266,10 @@ function SalesReportController($scope, $element, $http, $timeout, $location){
 
     $scope.search_item = function(){
         search_item($location, $scope, $http);
+    }
+
+    $scope.search_customer = function() {
+        search_customer($location, $scope, $http);
     }
 
     $scope.get_report_type =function() {
@@ -2288,6 +2355,10 @@ function PurchaseReturnController($scope, $element, $http, $timeout, share, $loc
 
     $scope.search_item = function(){
         search_item($location, $scope, $http);
+    }
+
+    $scope.search_customer = function() {
+        search_customer($location, $scope, $http);
     }
   
     $scope.load_purchase = function() {
@@ -2406,6 +2477,10 @@ function SalesReturnReportController($scope, $element, $http, $timeout, $locatio
     $scope.search_item = function(){
         search_item($location, $scope, $http);
     }
+
+    $scope.search_customer = function() {
+        search_customer($location, $scope, $http);
+    }
 }
 
 function SalesReturnController($scope, $element, $http, $timeout, share, $location) {
@@ -2430,6 +2505,10 @@ function SalesReturnController($scope, $element, $http, $timeout, share, $locati
     }
     $scope.search_item = function(){
         search_item($location, $scope, $http);
+    }
+
+    $scope.search_customer = function() {
+        search_customer($location, $scope, $http);
     }
     $scope.validate_salesreturn = function() {
             
@@ -2613,6 +2692,10 @@ function AddItemController($scope, $http, $element, $location, $timeout) {
 
     $scope.search_item = function(){
         search_item($location, $scope, $http);
+    }
+
+    $scope.search_customer = function() {
+        search_customer($location, $scope, $http);
     }
 
     $scope.get_brands = function() {
@@ -2840,6 +2923,10 @@ function OpeningStockController($scope, $http, $element, $location, $timeout) {
     $scope.search_item = function(){
         search_item($location, $scope, $http);
     }
+
+    $scope.search_customer = function() {
+        search_customer($location, $scope, $http);
+    }
 }
 
 function StockEditController($scope, $http, $element, $location, $timeout) {
@@ -2937,6 +3024,10 @@ function QuotationController($scope, $element, $http, $timeout, share, $location
     }
     $scope.search_item = function(){
         search_item($location, $scope, $http);
+    }
+
+    $scope.search_customer = function() {
+        search_customer($location, $scope, $http);
     }
 
     $scope.add_customer = function() {
@@ -3162,6 +3253,9 @@ function DeliveryNoteController($scope, $element, $http, $timeout, share, $locat
     $scope.search_item = function(){
         search_item($location, $scope, $http);
     }
+    $scope.search_customer = function() {
+        search_customer($location, $scope, $http);
+    }
     $scope.get_quotation_details = function(){
         get_quotation_details($http, $scope, 'delivery_note');
     }
@@ -3328,6 +3422,10 @@ function ReceiptVoucherController($scope, $element, $http, $timeout, share, $loc
     $scope.search_item = function(){
         search_item($location, $scope, $http);
     }
+
+    $scope.search_customer = function() {
+        search_customer($location, $scope, $http);
+    }
     $scope.receipt_validation = function(){
 
         $scope.receiptvoucher.date = $$('#receipt_voucher_date')[0].get('value');
@@ -3472,6 +3570,10 @@ function DirectDeliveryNoteController($scope, $element, $http, $timeout, share, 
     }
     $scope.search_item = function(){
         search_item($location, $scope, $http);
+    }
+
+    $scope.search_customer = function() {
+        search_customer($location, $scope, $http);
     }
     $scope.add_customer = function() {
 
@@ -3706,6 +3808,10 @@ function EditSalesInvoiceController($scope, $element, $location, $http){
     }
     $scope.search_item = function(){
         search_item($location, $scope, $http);
+    }
+
+    $scope.search_customer = function() {
+        search_customer($location, $scope, $http);
     }
     $scope.add_invoice = function(invoice) {
         $scope.invoice_selected = true;
@@ -4009,6 +4115,10 @@ function EditQuotationController($scope, $element, $http, $timeout, share, $loca
     $scope.search_item = function(){
         search_item($location, $scope, $http);
     }
+
+    $scope.search_customer = function() {
+        search_customer($location, $scope, $http);
+    }
     $scope.getItems = function(parameter){
 
         if(parameter == 'item_code')
@@ -4237,7 +4347,13 @@ function EditDeliveryController($scope, $element, $http, $timeout, share, $locat
         $scope.csrf_token = csrf_token;
     }
     $scope.sales_items = [];
-    
+
+    $scope.search_item = function(){
+        search_item($location, $scope, $http);
+    }
+    $scope.search_customer = function() {
+        search_customer($location, $scope, $http);
+    }
     $scope.getItems = function(parameter){
 
         if(parameter == 'item_code')
@@ -4452,6 +4568,9 @@ function EditItemController($scope, $http, $element, $location, $timeout) {
 
     $scope.search_item = function(){
         search_item($location, $scope, $http);
+    }
+    $scope.search_customer = function() {
+        search_customer($location, $scope, $http);
     }
 
     $scope.get_brands = function() {
@@ -4672,6 +4791,10 @@ function PrintQuotationController($scope, $http, $location, $element) {
         search_item($location, $scope, $http);
     }
 
+    $scope.search_customer = function() {
+        search_customer($location, $scope, $http);
+    }
+
     $scope.get_quotation_details = function(){
         get_quotation_details($http, $scope, 'whole_quotations');
     }
@@ -4757,6 +4880,10 @@ function PrintDeliveryNoteController($scope, $http, $location, $element) {
     }
     $scope.search_item = function(){
         search_item($location, $scope, $http);
+    }
+
+    $scope.search_customer = function() {
+        search_customer($location, $scope, $http);
     }
 
     $scope.add_delivery_note = function(delivery_note) {
