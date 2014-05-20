@@ -491,7 +491,10 @@ function PurchaseController($scope, $element, $http, $timeout, share, $location)
         $scope.get_vendors();
         $scope.get_brands();
         $scope.get_companies();
+    }
 
+    $scope.search_item = function(){
+        search_item($location, $scope, $http);
     }
 
     $scope.get_vendors = function() {
@@ -2022,6 +2025,10 @@ function ExpenseReportController($scope, $http, $element, $timeout, $location){
             useFadeInOut: !Browser.ie,
             format:'%d/%m/%Y', 
         });
+    }
+
+    $scope.search_item = function(){
+        search_item($location, $scope, $http);
     }
     
 }
