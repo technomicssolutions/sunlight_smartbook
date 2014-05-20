@@ -2,9 +2,9 @@
 {% block title %}Salesman Wise Sales Report{% endblock title %}
 {% block body_id %}salesman_reports_salesman{% endblock %}
 {% block controller %}ng-controller="HomeController" ng-init="init('{{csrf_token}}')"{% endblock controller %}
+
 {% block dialogue_popup %}
-	{% include 'search.html' %}
-	              	
+	{% include 'search.html' %}	              	
 {% endblock %}
 
 {% block content %}

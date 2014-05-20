@@ -4,6 +4,7 @@
 
 {% block title %}Create Quotation{% endblock title %}
 {% block controller %}ng-controller="QuotationController" ng-init="init('{{csrf_token}}')"{% endblock controller %}
+
 {% block dialogue_popup %}
 	{% include 'add_new_customer.html' %} 
 	{% include 'search.html' %}

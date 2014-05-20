@@ -6,6 +6,10 @@
 	ng-controller="StockReportController" ng-init="init('{{csrf_token}}')"
 {% endblock controller %}
 
+{% block dialogue_popup %}
+	{% include 'search.html' %}	              	
+{% endblock %}
+
 {% block content %}
 	<div class="main-title">
 		
