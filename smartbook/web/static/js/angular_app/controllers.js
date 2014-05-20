@@ -2829,6 +2829,9 @@ function QuotationController($scope, $element, $http, $timeout, share, $location
             console.log(data || "Request failed");
         });
     }
+    $scope.search_item = function(){
+        search_item($location, $scope, $http);
+    }
 
     $scope.add_customer = function() {
 
@@ -3050,7 +3053,9 @@ function DeliveryNoteController($scope, $element, $http, $timeout, share, $locat
     $scope.selected_item = '';
     $scope.selecting_quotation = false;
     $scope.quotation_selected = false;
-
+    $scope.search_item = function(){
+        search_item($location, $scope, $http);
+    }
     $scope.get_quotation_details = function(){
         get_quotation_details($http, $scope, 'delivery_note');
     }
@@ -3888,6 +3893,9 @@ function EditQuotationController($scope, $element, $http, $timeout, share, $loca
         $scope.csrf_token = csrf_token;
         $scope.popup = '';            
     }
+    $scope.search_item = function(){
+        search_item($location, $scope, $http);
+    }
     $scope.getItems = function(parameter){
 
         if(parameter == 'item_code')
@@ -4543,6 +4551,9 @@ function PrintQuotationController($scope, $http, $location, $element) {
 
     $scope.init = function(csrf_token) {
         $scope.csrf_token = csrf_token;
+    }
+    $scope.search_item = function(){
+        search_item($location, $scope, $http);
     }
 
     $scope.get_quotation_details = function(){
