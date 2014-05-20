@@ -638,10 +638,10 @@ class CreateQuotationPdf(View):
         p.drawString(110, y-160, "Proof          : " + str(quotation.proof))
         p.drawString(110, y-180, "Payment    : " + str(quotation.payment))
         p.drawString(110, y-200, "Validity       : " + str(quotation.validity))
-        p.drawString(110, y-220, "For")
-        p.drawString(110, y-240, "Sunlight Stationary")
-        p.drawString(110, y-260, "Authorized Signatory")
-        p.drawString(700, y-260, "Prepared By")
+        p.drawString(110, y-270, "For")
+        p.drawString(110, y-290, "Sunlight Stationary")
+        p.drawString(110, y-350, "Authorized Signatory")
+        p.drawString(700, y-350, "Prepared By")
         
         # if x >= 270:
         # p.drawString(110, 150, "For")
