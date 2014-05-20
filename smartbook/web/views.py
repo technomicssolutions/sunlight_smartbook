@@ -591,7 +591,13 @@ class CustomerSearch(View):
 
                 for customer in customers:
 
-                    ctx_search_result.append(customer.customer_name)
+                    ctx_search_result.append({
+                        'name': customer.customer_name if customer.customer_name else '',
+                        'house_name': customer.house_name if customer.house_name else '',
+                        'street': customer.street if customer.street else '',
+                        'mobile': customer.mobile_number if customer.mobile_number else '',
+                        'city': customer.city if customer.city else '',
+                    })
                 res = {
                     'result': 'ok',
                     'search_results': ctx_search_result,

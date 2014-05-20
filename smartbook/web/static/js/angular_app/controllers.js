@@ -193,7 +193,7 @@ search_customer = function($location, $scope, $http) {
             $scope.errormessage = '';
             var height = $(document).height();
             $scope.search_popup = new DialogueModelWindow({
-                'dialogue_popup_width': '27%',
+                'dialogue_popup_width': '47%',
                 'message_padding': '0px',
                 'left': '28%',
                 'top': '175px',
