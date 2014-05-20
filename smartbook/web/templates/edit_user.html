@@ -15,7 +15,9 @@
 	ng-controller="AddEditUserController" ng-init="init('{{csrf_token}}', '{{user_type}}')"   
 {% endblock controller %}
 {% block dialogue_popup %}
-	{% include 'add_designation.html' %}              	
+	{% include 'add_designation.html' %}   
+	{% include 'search.html' %}
+          	
 {% endblock %}
 
 {% block content %}

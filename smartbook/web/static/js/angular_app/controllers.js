@@ -322,6 +322,9 @@ function AddEditUserController($scope, $element, $http, $timeout, $location) {
             console.log(data || "Request failed");
         });
     }
+    $scope.search_item = function(){
+        search_item($location, $scope, $http);
+    }
     $scope.add_designation = function() {
         if($scope.designation == 'other') {
             $scope.popup = new DialogueModelWindow({
@@ -1400,6 +1403,9 @@ function SalesController($scope, $element, $http, $timeout, share, $location) {
             $scope.payment_mode_selection = true;
         }
     }
+    $scope.search_item = function(){
+        search_item($location, $scope, $http);
+    }
     $scope.validate_sales = function() {
         $scope.sales.customer = $scope.customer;
         if($scope.sales.sales_invoice_date == '') {
@@ -2337,6 +2343,9 @@ function SalesReturnController($scope, $element, $http, $timeout, share, $locati
             format:'%d/%m/%Y', 
         });
     }
+    $scope.search_item = function(){
+        search_item($location, $scope, $http);
+    }
     $scope.validate_salesreturn = function() {
             
         if($scope.sales_return.invoice_number == '') {
@@ -3219,7 +3228,9 @@ function ReceiptVoucherController($scope, $element, $http, $timeout, share, $loc
         });
     }
 
-    
+    $scope.search_item = function(){
+        search_item($location, $scope, $http);
+    }
     $scope.receipt_validation = function(){
 
         $scope.receiptvoucher.date = $$('#receipt_voucher_date')[0].get('value');
@@ -3362,7 +3373,9 @@ function DirectDeliveryNoteController($scope, $element, $http, $timeout, share, 
             console.log(data || "Request failed");
         });
     }
-
+    $scope.search_item = function(){
+        search_item($location, $scope, $http);
+    }
     $scope.add_customer = function() {
 
         if($scope.customer == 'other') {
@@ -3593,6 +3606,9 @@ function EditSalesInvoiceController($scope, $element, $location, $http){
         {
             console.log(data || "Request failed");
         });
+    }
+    $scope.search_item = function(){
+        search_item($location, $scope, $http);
     }
     $scope.add_invoice = function(invoice) {
         $scope.invoice_selected = true;
@@ -4638,6 +4654,9 @@ function PrintDeliveryNoteController($scope, $http, $location, $element) {
 
     $scope.get_delivery_note_details = function(){
         get_delivery_note_details($http, $scope, 'whole_delivery_notes', $scope.delivery_note_no);
+    }
+    $scope.search_item = function(){
+        search_item($location, $scope, $http);
     }
 
     $scope.add_delivery_note = function(delivery_note) {
