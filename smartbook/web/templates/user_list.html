@@ -3,6 +3,12 @@
 {% endblock title %}
 {% block body_id %}list-{{user_type}}{% endblock %}
 
+{% block controller %}ng-controller="HomeController" ng-init="init('{{csrf_token}}')"{% endblock controller %}
+
+{% block dialogue_popup %}
+	{% include 'search.html' %}	              	
+{% endblock %}
+
 {% block content %}
 
 <div class="top_section">

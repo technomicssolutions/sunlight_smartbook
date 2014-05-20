@@ -4,6 +4,7 @@
 
 {% block title %}Sales-Quotation-DeliveryNote {% endblock title %}
 {% block controller %}ng-controller="SalesQNDNController" ng-init="init('{{csrf_token}}', '{{sales_invoice_number}}')" ng-click="hide_sales_details()"{% endblock controller %}
+
 {% block dialogue_popup %}
 	{% include 'add_new_customer.html' %} 
 	{% include 'search.html' %}

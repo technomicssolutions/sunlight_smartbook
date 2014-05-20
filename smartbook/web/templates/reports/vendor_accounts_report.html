@@ -6,6 +6,10 @@
 	ng-controller="VendorAccountReportController" ng-init="init('{{csrf_token}}','{{report_type}}')"   
 {% endblock controller %}
 
+{% block dialogue_popup %}
+	{% include 'search.html' %}	              	
+{% endblock %}
+
 {% block content %}
 	<div>
 
