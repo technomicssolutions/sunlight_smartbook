@@ -5,6 +5,10 @@
 {% block title %} Edit Sale Invoice {% endblock title %}
 {% block controller %}ng-controller="EditSalesInvoiceController" ng-init="init('{{csrf_token}}')" ng-click="hide_sales_details()"{% endblock controller %}
 
+{% block dialogue_popup %}
+	{% include 'add_new_customer.html' %} 	              	
+{% endblock %}
+
 {% block content %}
 
 	<div id="main-title">

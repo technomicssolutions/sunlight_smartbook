@@ -3231,6 +3231,10 @@ function ReceiptVoucherController($scope, $element, $http, $timeout, share, $loc
     $scope.search_item = function(){
         search_item($location, $scope, $http);
     }
+
+    $scope.search_item = function(){
+        search_item($location, $scope, $http);
+    }
     $scope.receipt_validation = function(){
 
         $scope.receiptvoucher.date = $$('#receipt_voucher_date')[0].get('value');
@@ -3607,6 +3611,10 @@ function EditSalesInvoiceController($scope, $element, $location, $http){
             console.log(data || "Request failed");
         });
     }
+    $scope.search_item = function(){
+        search_item($location, $scope, $http);
+    }
+
     $scope.search_item = function(){
         search_item($location, $scope, $http);
     }
@@ -4655,6 +4663,10 @@ function PrintDeliveryNoteController($scope, $http, $location, $element) {
     $scope.get_delivery_note_details = function(){
         get_delivery_note_details($http, $scope, 'whole_delivery_notes', $scope.delivery_note_no);
     }
+    $scope.search_item = function(){
+        search_item($location, $scope, $http);
+    }
+
     $scope.search_item = function(){
         search_item($location, $scope, $http);
     }
