@@ -165,7 +165,7 @@ search_item = function($location, $scope, $http) {
                 $scope.errormessage = '';
                 var height = $(document).height();
                 $scope.search_popup = new DialogueModelWindow({
-                    'dialogue_popup_width': '27%',
+                    'dialogue_popup_width': '37%',
                     'message_padding': '0px',
                     'left': '28%',
                     'top': '175px',
@@ -202,7 +202,7 @@ function HomeController($scope, $location, $element, $http) {
     $scope.search_item = function(){
         search_item($location, $scope, $http);
     }
-    
+
 }
 
 function ExpenseController($scope, $element, $http, $timeout, $location) {
@@ -4662,7 +4662,7 @@ function PrintQuotationController($scope, $http, $location, $element) {
     }
     $scope.print_quotation = function() {
         if ($scope.quotation.quotation_id == '') {
-            $scope.message = "Please Enter REference No";
+            $scope.message = "Please Enter Reference No";
         } else {
             $scope.message = '';
             document.location.href = '/sales/create_quotation_pdf/'+$scope.quotation.quotation_id+'/';
