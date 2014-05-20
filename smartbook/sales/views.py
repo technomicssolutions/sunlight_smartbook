@@ -1462,10 +1462,9 @@ class DirectDeliveryNote(View):
         if request.is_ajax():
             delivery_note_details = ast.literal_eval(request.POST['delivery_note'])
             customer = Customer.objects.get(customer_name=delivery_note_details['customer'])
-            delivery_note = DeliveryNote.objects.create(customer=customer)
+            delivery_note, obj_created = DeliveryNote.objects.get_or_create(customer=customer, delivery_note_number = delivery_note_details['delivery_note_no'])
             delivery_note.date = datetime.strptime(delivery_note_details['date'], '%d-%m-%Y')
             delivery_note.lpo_number = delivery_note_details['lpo_no']
-            delivery_note.delivery_note_number = delivery_note_details['delivery_note_no']
             delivery_note.net_total = delivery_note_details['net_total']
             delivery_note.save()
 
