@@ -123,13 +123,13 @@ search_item = function($location, $scope, $http) {
     var search_url = '';
 
 
-    if ($scope.item_name == undefined && $scope.name_of_customer == undefined) {
+    if ($scope.name_of_item == undefined && $scope.name_of_customer == undefined) {
         $scope.errormessage = 'Please enter item or customer to search';
     } else {
 
-        if ($scope.item_name != undefined) {
-            console.log($scope.item_name.length);
-            if ($scope.item_name.length == 0) {
+        if ($scope.name_of_item != undefined) {
+            console.log($scope.name_of_item.length);
+            if ($scope.name_of_item.length == 0) {
                 console.log('hiii');
                 $scope.errormessage = 'Please enter item or customer to search';
                 var search_url = '';
@@ -146,7 +146,7 @@ search_item = function($location, $scope, $http) {
             } else {
                 $scope.is_item = true;
                 $scope.is_customer = false;
-                var search_url = '/inventory/item/search/?item_name='+$scope.item_name; 
+                var search_url = '/inventory/item/search/?item_name='+$scope.name_of_item; 
             } 
             
         } else if($scope.name_of_customer != undefined){
@@ -176,8 +176,8 @@ search_item = function($location, $scope, $http) {
                 });
                 $scope.search_popup.set_overlay_height(height);
                 $scope.search_popup.show_content();
-                if($scope.item_name != undefined) {
-                    if ($scope.item_name.length > 0) {
+                if($scope.name_of_item != undefined) {
+                    if ($scope.name_of_item.length > 0) {
                         $scope.items = data.search_results; 
                     } else {
                         $scope.customers = data.search_results;
