@@ -3614,10 +3614,6 @@ function EditSalesInvoiceController($scope, $element, $location, $http){
     $scope.search_item = function(){
         search_item($location, $scope, $http);
     }
-
-    $scope.search_item = function(){
-        search_item($location, $scope, $http);
-    }
     $scope.add_invoice = function(invoice) {
         $scope.invoice_selected = true;
         $scope.invoice_no = invoice.invoice_no;
