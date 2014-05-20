@@ -232,6 +232,11 @@ function ExpenseController($scope, $element, $http, $timeout, $location) {
             console.log(data || "Request failed");
         });
     }
+
+    $scope.search_item = function(){
+        search_item($location, $scope, $http);
+    }
+    
     $scope.payment_mode_change = function(payment_mode) {
         if(payment_mode == 'cheque') {
             $scope.payment_mode_selection = false;
@@ -1823,6 +1828,11 @@ function VendorAccountController($scope, $element, $http, $timeout, $location){
             format: '%d/%m/%Y',
         });
     }
+
+    $scope.search_item = function(){
+        search_item($location, $scope, $http);
+    }
+
     $scope.select_payment_mode = function(){
         if($scope.vendor_account.payment_mode == 'cheque') {
             $scope.cash = false;
@@ -2567,6 +2577,10 @@ function AddItemController($scope, $http, $element, $location, $timeout) {
         $scope.get_uoms();
     }
 
+    $scope.search_item = function(){
+        search_item($location, $scope, $http);
+    }
+
     $scope.get_brands = function() {
         $http.get('/inventory/brand_list/').success(function(data)
         {
@@ -2788,6 +2802,10 @@ function OpeningStockController($scope, $http, $element, $location, $timeout) {
             return true;
         }
     }
+
+    $scope.search_item = function(){
+        search_item($location, $scope, $http);
+    }
 }
 
 function StockEditController($scope, $http, $element, $location, $timeout) {
@@ -2834,6 +2852,10 @@ function StockEditController($scope, $http, $element, $location, $timeout) {
             document.getElementById("edit_stock_form").submit();
             return true;
         }
+    }
+
+    $scope.search_item = function(){
+        search_item($location, $scope, $http);
     }
 }
 
@@ -4394,6 +4416,10 @@ function EditItemController($scope, $http, $element, $location, $timeout) {
         $scope.get_uoms();
     }
 
+    $scope.search_item = function(){
+        search_item($location, $scope, $http);
+    }
+
     $scope.get_brands = function() {
         $http.get('/inventory/brand_list/').success(function(data)
         {
@@ -4419,7 +4445,6 @@ function EditItemController($scope, $http, $element, $location, $timeout) {
             var height = $(document).height();
             $scope.popup.set_overlay_height(height);
             $scope.popup.show_content();
-
         }
     }
     $scope.show_list_brand = function() {

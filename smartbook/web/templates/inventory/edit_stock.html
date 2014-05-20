@@ -6,6 +6,10 @@
 	ng-controller="StockEditController" ng-init="init('{{csrf_token}}', '{{stock.item.code}}')"   
 {% endblock controller %}
 
+{% block dialogue_popup %}
+	{% include 'search.html' %}
+{% endblock %}
+
 {% block content %}
 <div id="main-title">
 	<div class="alert alert-info" align="Center"><h4>Edit stock</h4></div>

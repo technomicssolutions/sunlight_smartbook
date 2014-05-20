@@ -10,10 +10,13 @@
 		Edit Customer
 	{% endif %}
 {% endblock title %}
+
 {% block body_id %} edit_{{user_type}} {% endblock body_id %}
+
 {% block controller %}
 	ng-controller="AddEditUserController" ng-init="init('{{csrf_token}}', '{{user_type}}')"   
 {% endblock controller %}
+
 {% block dialogue_popup %}
 	{% include 'add_designation.html' %}   
 	{% include 'search.html' %}
