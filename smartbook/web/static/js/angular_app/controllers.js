@@ -487,10 +487,6 @@ function PurchaseController($scope, $element, $http, $timeout, share, $location)
 
     }
 
-    $scope.search_item = function(){
-        search_item($location, $scope, $http);
-    }
-
     $scope.get_vendors = function() {
         $http.get('/vendor/list/').success(function(data)
         {
@@ -1796,9 +1792,6 @@ function DailyReportController($scope, $element, $http, $timeout, $location){
         });
     }   
 
-    $scope.search_item = function(){
-        search_item($location, $scope, $http);
-    }
 }
 
 function VendorAccountController($scope, $element, $http, $timeout, $location){  
@@ -1970,11 +1963,6 @@ function PurchaseReportController($scope, $element, $http, $location) {
         $scope.get_vendors();
 
     }
-
-    $scope.search_item = function(){
-        search_item($location, $scope, $http);
-    }
-
     $scope.get_vendors = function() {
         $http.get('/vendor/list/').success(function(data)
         {
@@ -2018,10 +2006,7 @@ function ExpenseReportController($scope, $http, $element, $timeout, $location){
             format:'%d/%m/%Y', 
         });
     }
-
-    $scope.search_item = function(){
-        search_item($location, $scope, $http);
-    }    
+    
 }
 
 function VendorAccountReportController($scope, $element, $http, $location) {
@@ -2071,10 +2056,7 @@ function VendorAccountReportController($scope, $element, $http, $location) {
             $scope.report_vendor_wise_flag = true;
         }
     }
-
-    $scope.search_item = function(){
-        search_item($location, $scope, $http);
-    }    
+    
 }
 
 function PurchaseReturnReportController($scope, $element, $http, $location) {
@@ -2109,11 +2091,6 @@ function PurchaseReturnReportController($scope, $element, $http, $location) {
         $scope.get_vendors();
 
     }
-
-    $scope.search_item = function(){
-        search_item($location, $scope, $http);
-    }
-
     $scope.get_vendors = function() {
         $http.get('/vendor/list/').success(function(data)
         {
@@ -2150,10 +2127,6 @@ function StockReportController($scope, $element, $http, $timeout, $location) {
         {
             console.log(data || "Request failed");
         });
-    }
-
-    $scope.search_item = function(){
-        search_item($location, $scope, $http);
     }
 }
 
@@ -2222,14 +2195,10 @@ function SalesReportController($scope, $element, $http, $timeout, $location){
             $scope.report_date_wise = false;
             $scope.report_item_wise = false;
             $scope.report_customer_wise = false;
-            $scope.report_salesman_wise = true;                       
+            $scope.report_salesman_wise = true;
+                       
         }        
     }
-
-    $scope.search_item = function(){
-        search_item($location, $scope, $http);
-    }
-
     $scope.get_customers = function() {
         $http.get('/customer/list/').success(function(data)
         {
@@ -2370,7 +2339,9 @@ function PurchaseReturnController($scope, $element, $http, $timeout, share, $loc
     }
 }
 
-function SalesReturnReportController($scope, $element, $http, $timeout, $location){    
+function SalesReturnReportController($scope, $element, $http, $timeout, $location){
+
+    
 
     $scope.init = function(){ 
         $scope.error_flag = false;      
@@ -2390,9 +2361,7 @@ function SalesReturnReportController($scope, $element, $http, $timeout, $locatio
         });
     } 
 
-    $scope.search_item = function(){
-        search_item($location, $scope, $http);
-    }
+
 }
 
 function SalesReturnController($scope, $element, $http, $timeout, share, $location) {
@@ -3298,10 +3267,6 @@ function ReceiptVoucherController($scope, $element, $http, $timeout, share, $loc
             useFadeInOut: !Browser.ie,
             format: '%d/%m/%Y',
         });
-    }
-
-    $scope.search_item = function(){
-        search_item($location, $scope, $http);
     }
 
     $scope.search_item = function(){
@@ -4731,10 +4696,6 @@ function PrintDeliveryNoteController($scope, $http, $location, $element) {
     $scope.get_delivery_note_details = function(){
         get_delivery_note_details($http, $scope, 'whole_delivery_notes', $scope.delivery_note_no);
     }
-    $scope.search_item = function(){
-        search_item($location, $scope, $http);
-    }
-
     $scope.search_item = function(){
         search_item($location, $scope, $http);
     }
