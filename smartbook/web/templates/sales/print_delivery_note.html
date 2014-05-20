@@ -6,8 +6,9 @@
 {% block controller %}ng-controller="PrintDeliveryNoteController" ng-init="init('{{csrf_token}}')"{% endblock controller %}
 
 {% block dialogue_popup %}
-	{% include 'add_new_customer.html' %} 	              	
+	{% include 'search.html' %}	              	
 {% endblock %}
+
 {% block content %}
 
 	<div id="main-title">

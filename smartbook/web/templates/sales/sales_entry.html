@@ -4,10 +4,12 @@
 
 {% block title %}Sales Entry{% endblock title %}
 {% block controller %}ng-controller="SalesController" ng-init="init('{{csrf_token}}', '{{sales_invoice_number}}')" ng-click="hide_sales_details()"{% endblock controller %}
+
 {% block dialogue_popup %}
 	{% include 'add_new_customer.html' %} 
-	              	
+	{% include 'search.html' %}	 	              	
 {% endblock %}
+
 {% block extrahead %}
 	<script type="text/javascript">
 		window.addEvent('domready',function() {
