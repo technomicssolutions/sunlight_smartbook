@@ -4,10 +4,10 @@
 
 {% block title %}Edit Quotation{% endblock title %}
 {% block controller %}ng-controller="EditQuotationController" ng-init="init('{{csrf_token}}')"{% endblock controller %}
+
 {% block dialogue_popup %}
 	{% include 'add_new_customer.html' %} 
-	{% include 'search.html' %}
-	              	
+	{% include 'search.html' %}	              	
 {% endblock %}
 
 {% block content %}

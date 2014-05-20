@@ -1,5 +1,10 @@
 {% extends 'base.html' %}
 {% block title %}Home{% endblock title%}
+{% block controller %}ng-controller="HomeController" ng-init="init('{{csrf_token}}')"{% endblock controller %}
+{% block dialogue_popup %}
+	{% include 'search.html' %}
+	              	
+{% endblock %}
 {% block content %}
 	{% if user.is_authenticated %}	
 		<h1 class="welcome"> Welcome to {{owner_company_name}} </h1>

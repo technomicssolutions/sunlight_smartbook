@@ -4,6 +4,10 @@
 
 {% block title %}Print Delivery{% endblock title %}
 {% block controller %}ng-controller="PrintDeliveryNoteController" ng-init="init('{{csrf_token}}')"{% endblock controller %}
+{% block dialogue_popup %}
+	{% include 'search.html' %}
+	              	
+{% endblock %}
 
 {% block dialogue_popup %}
 	{% include 'search.html' %}	              	

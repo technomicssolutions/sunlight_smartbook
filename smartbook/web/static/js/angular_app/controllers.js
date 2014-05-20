@@ -119,21 +119,50 @@ search_item = function($location, $scope, $http) {
     $scope.search_popup = '';
     $scope.is_item = false;
     $scope.is_customer = false;
-    var search_url = ''
-    if ($scope.item_name != undefined ) {
-        console.log('hii in if ');
-        var search_url = '/inventory/item/search/?item_name='+$scope.item_name; 
-    } else if ($scope.name_of_customer != undefined){
-        console.log('in else');
-        $scope.item_name = undefined;
-        var search_url = '/customer/search/?customer='+$scope.name_of_customer;
-    }
-    if ($scope.item_name != undefined || $scope.name_of_customer != undefined) {
-        $http.get(search_url).success(function(data) {
-            if(data.result == 'error'){
-                console.log(data.search_results); 
-                $scope.errormessage = 'No data available';
+    $scope.errormessage = ' ';
+    var search_url = '';
+
+
+    if ($scope.item_name == undefined && $scope.name_of_customer == undefined) {
+        $scope.errormessage = 'Please enter item or customer to search';
+    } else {
+
+        if ($scope.item_name != undefined) {
+            console.log($scope.item_name.length);
+            if ($scope.item_name.length == 0) {
+                console.log('hiii');
+                $scope.errormessage = 'Please enter item or customer to search';
+                var search_url = '';
+                if($scope.name_of_customer != undefined){
+                    if ($scope.name_of_customer.length == 0) {
+                        $scope.errormessage = 'Please enter customer to search';
+                        var search_url = '';
+                    } else {
+                        $scope.is_customer = true;
+                        $scope.is_item = false;
+                        var search_url = '/customer/search/?customer='+$scope.name_of_customer;
+                    } 
+                } 
             } else {
+                $scope.is_item = true;
+                $scope.is_customer = false;
+                var search_url = '/inventory/item/search/?item_name='+$scope.item_name; 
+            } 
+            
+        } else if($scope.name_of_customer != undefined){
+            if ($scope.name_of_customer.length == 0) {
+                $scope.errormessage = 'Please enter customer to search';
+                var search_url = '';
+            } else {
+                var search_url = '/customer/search/?customer='+$scope.name_of_customer;
+            } 
+        } 
+        
+        $http.get(search_url).success(function(data) {
+            if(data.result != 'ok'){
+                $scope.errormessage = 'Please enter item or customer to search';
+            } else {
+                $scope.errormessage = '';
                 var height = $(document).height();
                 $scope.search_popup = new DialogueModelWindow({
                     'dialogue_popup_width': '27%',
@@ -146,23 +175,35 @@ search_item = function($location, $scope, $http) {
                 $scope.search_popup.set_overlay_height(height);
                 $scope.search_popup.show_content();
                 if($scope.item_name != undefined) {
-                    $scope.is_item = true;
-                    $scope.is_customer = false;
-                    $scope.items = data.search_results; 
+                    if ($scope.item_name.length > 0) {
+                        $scope.items = data.search_results; 
+                    } else {
+                        $scope.customers = data.search_results;
+                    }
+                    
                 } else if ($scope.name_of_customer != undefined) {
-                    $scope.is_customer = true;
-                    $scope.is_item = false;
                     $scope.customers = data.search_results;
                 }
             }
             
         }).error(function(data, status)
         {
+            $scope.errormessage = 'No data availbale';
             console.log(data || "Request failed");
         });
     }
 }
 
+
+function HomeController($scope, $location, $element, $http) {
+    $scope.init = function(csrf_token) {
+        $scope.csrf_token = csrf_token;
+    }
+    $scope.search_item = function(){
+        search_item($location, $scope, $http);
+    }
+    
+}
 
 function ExpenseController($scope, $element, $http, $timeout, $location) {
 

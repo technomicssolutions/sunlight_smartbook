@@ -2,6 +2,11 @@
 {% block title %}Sales View
 {% endblock title %}
 {% block body_id %}sales_view{% endblock %}
+{% block controller %}ng-controller="HomeController" ng-init="init('{{csrf_token}}')"{% endblock controller %}
+{% block dialogue_popup %}
+	{% include 'search.html' %}
+	              	
+{% endblock %}
 
 {% block content %}
 
