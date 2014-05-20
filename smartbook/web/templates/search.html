@@ -1,0 +1,43 @@
+<div style='display:none' id="search_result">
+    <div id='add_new_customer' style='padding:10px; background:#fff;'>
+        <div class="sign_box">
+            <div class="row-fluid">
+                <div class="span12 sign_mid">
+                    <form action="" id="register" name="register" method="post" class="reg_sec">
+                        {% csrf_token %}
+                        
+                        <table class="table table-striped" id="search_results_table">
+                            <h4 id="align_center" ng-show="is_item"> Items </h4>
+                            <h4 id="align_center" ng-show="is_customer"> Customers </h4>
+                            <tr ng-show="is_item">
+                                <th> Item code </th> 
+                                <th> Item Name </th> 
+                                <th> UOM </th> 
+                                <th> Brand </th> 
+                                <th> Price </th> 
+                            </tr>
+                            <tr ng-show="is_customer">
+                                <th> Customer name </th> 
+                            </tr>
+
+                            <tr ng-repeat="item in items" ng-show="is_item">
+                                <td> [[item.code]] </td>
+                                <td> [[item.name]] </td>
+                                <td> [[item.uom]] </td>
+                                <td> [[item.brand]] </td>
+                                <td> [[item.price]] </td>
+
+                            </tr>
+
+                            <tr ng-repeat="customer in customers" ng-show="is_customer">
+                                <td> [[customer]] </td>
+                            </tr>
+
+                        </table>
+                    </form>                        
+                </div>
+            </div>    
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>

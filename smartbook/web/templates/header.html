@@ -88,4 +88,18 @@
 			</ul>
 		{% endif %}
 	</div>
+	<div class="menu_div_search">
+		{% if user.is_authenticated %}
+			<ul>
+				<li><input type="text" ng-model="item_name" placeholder="Item name"></li>
+				<li><input type="text" ng-model="name_of_customer" placeholder="Customer"></li>
+				<li class="last"><a href="" ng-click="search_item()">Search</a></li>
+				<li><p class="error_message">[[errormessage]]</p></li>
+				<!-- <li><input type="text" ng-model="item_name" placeholder><a href="" >Search Item</a></li>
+				<li><input type="text" ng-model="customer"><a href="" >Search Customer</a></li>
+				<li class="last"><input type="text" ng-model="price"><a href="">Search Price</a></li>
+				<li class="last"><a href="" ng-click="search_item()">Search</a></li> -->
+			</ul>
+		{% endif %}
+	</div>
 </div>

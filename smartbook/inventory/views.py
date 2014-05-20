@@ -352,3 +352,44 @@ class EditItem(View):
         return HttpResponse(response, status=status, mimetype='application/json')
 
 
+class ItemSearch(View):
+
+    def get(self, request, *args, **kwargs):
+
+        if request.is_ajax():
+
+            item_name = request.GET.get('item_name', '')
+            items = []
+            if item_name:
+                items = Item.objects.filter(name__istartswith=item_name)
+            ctx_search_result = []
+            if len(items) > 0:
+
+                for item in items:
+
+                    ctx_search_result.append({
+                        'name': item.name,
+                        'code': item.code,
+                        'barcode': item.barcode,
+                        'brand': item.brand.brand,
+                        'description': item.description,
+                        'tax': item.tax,
+                        'uom': item.uom.uom,
+                        'qty': item.inventory_set.all()[0].quantity if item.inventory_set.count() > 0  else 0 ,
+                        'price': item.inventory_set.all()[0].selling_price if item.inventory_set.count() > 0 else 0 ,
+                        'discount_permit': item.inventory_set.all()[0].discount_permit_percentage if item.inventory_set.count() > 0 else 0,
+                    })
+                res = {
+                    'result': 'ok',
+                    'search_results': ctx_search_result,
+                }
+                status_code = 200
+            else:
+                res = {
+                    'result': 'error',
+                } 
+                status_code = 500
+
+            response = simplejson.dumps(res)
+
+            return HttpResponse(response, status=status_code, mimetype='application/json')

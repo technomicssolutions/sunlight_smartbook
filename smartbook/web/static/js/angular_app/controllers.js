@@ -91,21 +91,69 @@ get_quotation_details = function($http, $scope, from){
 
 get_delivery_note_details = function($http, $scope, from, delivery_no){
 
-        $scope.delivery_notes = []
-        if (from == 'whole_delivery_notes') {
-            url = '/sales/delivery_note_details/?delivery_no='+delivery_no+'&whole_delivery_notes=true';
+    $scope.delivery_notes = []
+    if (from == 'whole_delivery_notes') {
+        url = '/sales/delivery_note_details/?delivery_no='+delivery_no+'&whole_delivery_notes=true';
+    } else {
+        url = '/sales/delivery_note_details/?delivery_no='+delivery_no;
+    }
+    $http.get(url).success(function(data)
+    {
+        if(data.delivery_notes.length > 0){
+            $scope.dn_message = ''
+            $scope.selecting_delivery_note = true;
+            $scope.delivery_note_selected = false;
+            $scope.delivery_notes = data.delivery_notes; 
         } else {
-            url = '/sales/delivery_note_details/?delivery_no='+delivery_no;
+            $scope.dn_message = "There is no delivery note with this number";
         }
-        $http.get(url).success(function(data)
-        {
-            if(data.delivery_notes.length > 0){
-                $scope.dn_message = ''
-                $scope.selecting_delivery_note = true;
-                $scope.delivery_note_selected = false;
-                $scope.delivery_notes = data.delivery_notes; 
+        
+    }).error(function(data, status)
+    {
+        console.log(data || "Request failed");
+    });
+}
+
+search_item = function($location, $scope, $http) {
+    
+    $scope.search_popup = '';
+    $scope.is_item = false;
+    $scope.is_customer = false;
+    var search_url = ''
+    if ($scope.item_name != undefined ) {
+        console.log('hii in if ');
+        var search_url = '/inventory/item/search/?item_name='+$scope.item_name; 
+    } else if ($scope.name_of_customer != undefined){
+        console.log('in else');
+        $scope.item_name = undefined;
+        var search_url = '/customer/search/?customer='+$scope.name_of_customer;
+    }
+    if ($scope.item_name != undefined || $scope.name_of_customer != undefined) {
+        $http.get(search_url).success(function(data) {
+            if(data.result == 'error'){
+                console.log(data.search_results); 
+                $scope.errormessage = 'No data available';
             } else {
-                $scope.dn_message = "There is no delivery note with this number";
+                var height = $(document).height();
+                $scope.search_popup = new DialogueModelWindow({
+                    'dialogue_popup_width': '27%',
+                    'message_padding': '0px',
+                    'left': '28%',
+                    'top': '175px',
+                    'height': 'auto',
+                    'content_div': '#search_result'
+                });
+                $scope.search_popup.set_overlay_height(height);
+                $scope.search_popup.show_content();
+                if($scope.item_name != undefined) {
+                    $scope.is_item = true;
+                    $scope.is_customer = false;
+                    $scope.items = data.search_results; 
+                } else if ($scope.name_of_customer != undefined) {
+                    $scope.is_customer = true;
+                    $scope.is_item = false;
+                    $scope.customers = data.search_results;
+                }
             }
             
         }).error(function(data, status)
@@ -113,6 +161,7 @@ get_delivery_note_details = function($http, $scope, from, delivery_no){
             console.log(data || "Request failed");
         });
     }
+}
 
 
 function ExpenseController($scope, $element, $http, $timeout, $location) {
@@ -864,6 +913,7 @@ function SalesQNDNController($scope, $element, $http, $timeout, share, $location
     $scope.payment_mode_selection_check = true;
     $scope.hide_selling_price = 0;
 
+
     $scope.sales = {
         'sales_items': [],
         'sales_invoice_number': '',
@@ -1059,7 +1109,9 @@ function SalesQNDNController($scope, $element, $http, $timeout, share, $location
         }
     }
 
-
+    $scope.search_item = function(){
+        search_item($location, $scope, $http);
+    }
     $scope.get_delivery_note_details = function(){
 
         get_delivery_note_details($http, $scope, 'sales', $scope.delivery_no);

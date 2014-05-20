@@ -857,3 +857,35 @@ a {
 #print_delivery_note .purchase_item_list .item_list_row span {
     width: 12.5%;
 }
+
+/*search bar in header*/
+
+.menu_div_search {
+	float: left;
+	height: 50%;
+	width: 100%;
+}
+.menu_div_search ul {
+	margin-left: 15%;
+}
+
+.menu_div_search ul li {
+	float: left;
+	display: block;
+	padding: 2px 10px 2px 5px;
+	position: relative;
+}
+.menu_div_search ul li a{
+	color: #FFFFFF;
+}
+.menu_div_search ul li a:hover {
+	color: #235580;
+	text-decoration: none;
+}
+
+#align_center {
+	text-align: center;
+}
+#search_results_table {
+	width: 95% !important;
+}

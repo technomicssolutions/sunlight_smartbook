@@ -575,3 +575,34 @@ class CreateCustomer(View):
             'user_type': 'customer'
         }
         return render(request, 'register_user.html',context)
+
+class CustomerSearch(View):
+
+    def get(self, request, *args, **kwargs):
+
+        if request.is_ajax():
+
+            customer_name = request.GET.get('customer', '')
+            customers = []
+            if customer_name:
+                customers = Customer.objects.filter(customer_name__istartswith=customer_name)
+            ctx_search_result = []
+            if len(customers) > 0:
+
+                for customer in customers:
+
+                    ctx_search_result.append(customer.customer_name)
+                res = {
+                    'result': 'ok',
+                    'search_results': ctx_search_result,
+                }
+                status_code = 200
+            else:
+                res = {
+                    'result': 'error',
+                } 
+                status_code = 500
+
+            response = simplejson.dumps(res)
+
+            return HttpResponse(response, status=status_code, mimetype='application/json')
