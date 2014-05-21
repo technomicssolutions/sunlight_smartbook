@@ -645,9 +645,9 @@ class CreateQuotationPdf(View):
 
 
         p.setFont("Helvetica", 15)
-        if y < 270:
+        if y <= 135:
             p.showPage()
-            y = 1000
+            y = 915
         p.drawString(110, y-100, "Hope the above quoted prices will meet your satisfaction and for further information please do not hesitate to contact us.")
         p.drawString(110, y-140, "Delivery     : " + str(quotation.delivery))
         p.drawString(110, y-160, "Proof          : " + str(quotation.proof))
@@ -1161,7 +1161,7 @@ class CreateSalesInvoicePDF(View):
         total_amount = 0
         for s_item in sales.salesitem_set.all():
                    
-            y = y-30
+            y = y-40
             if y <= 70:
                 y = 760
                 p.showPage()
