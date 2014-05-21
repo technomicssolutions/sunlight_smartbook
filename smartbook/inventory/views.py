@@ -25,15 +25,17 @@ class ItemAdd(View):
             try:
                 uom = UnitOfMeasure.objects.get(uom = request.POST['uom'])
                 brand = Brand.objects.get(brand = request.POST['brand'])
-                item, created = Item.objects.get_or_create(code=request.POST['code'], brand=brand, uom=uom, name=request.POST['name'])
-                if not created:
+                try:
+                    item = Item.objects.get(code=request.POST['code'])
+                    print "item =", item
                     res = {
                         'result': 'error',
                         'message': 'Item already existing'
                     }
                     status_code = 500
-                else:
-                    item.name=request.POST['name']
+                except:
+                    item = Item.objects.create(code=request.POST['code'], brand=brand, uom=uom, name=request.POST['name'])
+                    print "items=======", item
                     item.description=request.POST['description']
                     item.barcode=request.POST['barcode']
                     item.tax=request.POST['tax']
@@ -43,7 +45,8 @@ class ItemAdd(View):
                     }  
                     status_code = 200 
                 
-            except IntegrityError:
+            except IntegrityError as e:
+                print "e=", str(e)
                 res = {
                         'result': 'error',
                         'message': 'Item already existing'
@@ -90,6 +93,7 @@ class ItemList(View):
                     for item in items:
 
                         item_list.append({
+                            'id': item.id,
                             'sl_no': i,
                             'item_code': item.code,
                             'item_name': item.name,
