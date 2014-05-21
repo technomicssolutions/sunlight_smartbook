@@ -1415,7 +1415,8 @@ class LatestSalesDetails(View):
 
     def get(self, request, *args, **kwargs):
 
-        customer_name = request.GET.get('customer', '')
+        name_of_customer = request.GET.get('customer', '')
+        customer_name = name_of_customer.replace('_', ' ')
         name_of_item = request.GET.get('item_name', '')
         item_name = name_of_item.replace('_', ' ')
         print item_name
