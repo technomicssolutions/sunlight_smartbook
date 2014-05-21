@@ -79,6 +79,7 @@ get_quotation_details = function($http, $scope, from){
             $scope.selecting_quotation = true;
             $scope.quotation_selected = false;
             $scope.quotations = data.quotations;
+            $scope.message = '';
         } else {
             $scope.message = "There is no quotations with this number";
         }
@@ -3196,6 +3197,8 @@ function QuotationController($scope, $element, $http, $timeout, share, $location
                     $scope.error_flag=true;
                     $scope.message = data.message;
                 } else {
+                    $scope.error_flag = false;
+                    $scope.message = '';
                     document.location.href = '/sales/create_quotation_pdf/'+data.quotation_id+'/';
 
                 }
