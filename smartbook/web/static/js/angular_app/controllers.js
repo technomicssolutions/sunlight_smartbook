@@ -3114,16 +3114,17 @@ function QuotationController($scope, $element, $http, $timeout, share, $location
     
     
     $scope.calculate_net_amount_sale = function(item) {
+        if(item.qty_sold != '' && item.unit_price != ''){
+            item.net_amount = ((parseFloat(item.qty_sold)*parseFloat(item.unit_price))).toFixed(2);
+        }
+        $scope.calculate_net_total_amount();
         $scope.validation_error = "";
         if(parseInt(item.qty_sold) > parseInt(item.current_stock)) {
-            $scope.validation_error = "Qauntity not in stock";
+            $scope.validation_error = "Quantity not in stock";
             return false;
-        } else {
-            if(item.qty_sold != '' && item.unit_price != ''){
-                item.net_amount = ((parseFloat(item.qty_sold)*parseFloat(item.unit_price))).toFixed(2);
-            }
-            $scope.calculate_net_total_amount();
-        }
+        } 
+        
+        
     }
 
     $scope.calculate_net_total_amount = function() {
