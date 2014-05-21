@@ -602,7 +602,6 @@ class CreateQuotationPdf(View):
             # table.drawOn(p,105,460)
             table.drawOn(p,655, y)
 
-
             data1=[[q_item.net_amount]]
             table = Table(data1, colWidths=[135], rowHeights=40, style = style)
             table.setStyle(TableStyle([
@@ -618,9 +617,23 @@ class CreateQuotationPdf(View):
 
             i = i + 1
 
-        data=[['', quotation.net_total]]
+        total_amount_in_words = num2words(q_item.net_amount).title() + ' Only'            
 
-        table = Table(data, colWidths=[650, 160], rowHeights=40, style = style)
+        data=[[total_amount_in_words]]
+
+        table = Table(data, colWidths=[675], rowHeights=40, style = style)
+        table.setStyle(TableStyle([
+                                   # ('INNERGRID', (0,1), (-1,-1), 0.25, colors.black),
+                                   ('BOX', (0,0), (-1,-1), 0.25, colors.black),
+                                   ('VALIGN',(0,-1),(-1,-1),'MIDDLE'),
+                                   ('ALIGN', (0,0), (-1,-1),'CENTRE'),
+                                   ]))
+        table.wrapOn(p, 200, 400)
+        table.drawOn(p,105,y-40)
+
+        data=[[quotation.net_total]]
+
+        table = Table(data, colWidths=[135], rowHeights=40, style = style)
         table.setStyle(TableStyle([
                                    # ('INNERGRID', (0,1), (-1,-1), 0.25, colors.black),
                                    ('BOX', (0,0), (-1,-1), 0.25, colors.black),
@@ -628,7 +641,9 @@ class CreateQuotationPdf(View):
                                    ('ALIGN', (0,0), (-1,-1),'RIGHT'),
                                    ]))
         table.wrapOn(p, 200, 400)
-        table.drawOn(p,105,y-40)
+        table.drawOn(p, 780,y-40)
+
+
         p.setFont("Helvetica", 15)
         if y < 270:
             p.showPage()
@@ -1071,6 +1086,8 @@ class QuotationDeliverynoteSales(View):
         response = simplejson.dumps(res)
         status_code = 200
         return HttpResponse(response, status = status_code, mimetype="application/json")
+
+
 class CreateSalesInvoicePDF(View):
 
     def get(self, request, *args, **kwargs):
