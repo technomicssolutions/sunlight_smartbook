@@ -358,7 +358,7 @@ class DeliveryNotePDF(View):
                        
                 y = y-40
 
-                if y <= 270:
+                if y <= 70:
                     y = 760
                     p.showPage()
 
@@ -370,7 +370,7 @@ class DeliveryNotePDF(View):
         if delivery_note.deliverynoteitem_set.all().count() > 0:
             for delivery_item in delivery_note.deliverynoteitem_set.all():
                 y = y-40
-                if y <= 270:
+                if y <= 70:
                     y = 760
                     p.showPage()
 
@@ -1145,7 +1145,7 @@ class CreateSalesInvoicePDF(View):
         for s_item in sales.salesitem_set.all():
                    
             y = y-30
-            if y <= 270:
+            if y <= 70:
                 y = 760
                 p.showPage()
             
@@ -1158,7 +1158,7 @@ class CreateSalesInvoicePDF(View):
             table.drawOn(p,20,y)
             i = i + 1
         y = 600
-        if y <= 270:
+        if y <= 70:
             y = 760
             p.showPage()
         total_amount = sales.net_amount
