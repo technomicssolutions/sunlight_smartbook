@@ -282,7 +282,7 @@ class EditStockView(View):
     def post(self, request, *args, **kwargs):
 
         inventory = Inventory.objects.get(item__code=request.POST['item_code'])
-        inventory.quantity = request.POST['quantity']
+        inventory.quantity = inventory.quantity + int(request.POST['quantity'])
         inventory.unit_price = request.POST['unit_price']
         inventory.selling_price = request.POST['selling_price']
         inventory.discount_permit_amount = request.POST['discount_permit_amount']

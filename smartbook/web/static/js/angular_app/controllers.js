@@ -1065,13 +1065,6 @@ function SalesQNDNController($scope, $element, $http, $timeout, share, $location
         } else if($scope.sales.sales_items.length == 0){
             $scope.validation_error = "Choose Item";
             return false;
-        } else if($scope.sales.sales_items.length > 0){
-            for (var i=0; i < $scope.sales.sales_items.length; i++){
-                if (parseInt($scope.sales.sales_items[i].current_stock) < parseInt($scope.sales.sales_items[i].qty_sold)){
-                    $scope.validation_error = "Quantity not in stock for item "+$scope.sales.sales_items[i].item_name;
-                    return false;
-                }
-            }
         } else if( $scope.sales.payment_mode == 'card' && ($scope.sales.card_number == '' )) {
             $scope.validation_error = 'Please Enter Card Number';
             return false;
@@ -1513,13 +1506,6 @@ function SalesController($scope, $element, $http, $timeout, share, $location) {
         } else if($scope.sales.sales_items.length == 0){
             $scope.validation_error = "Choose Item";
             return false;
-        } else if($scope.sales.sales_items.length > 0){
-            for (var i=0; i < $scope.sales.sales_items.length; i++){
-                if (parseInt($scope.sales.sales_items[i].current_stock) < parseInt($scope.sales.sales_items[i].qty_sold)){
-                    $scope.validation_error = "Quantity not in stock for item "+$scope.sales.sales_items[i].item_name;
-                    return false;
-                }
-            }
         } 
         return true;
     }
@@ -3174,14 +3160,7 @@ function QuotationController($scope, $element, $http, $timeout, share, $location
         } else if($scope.quotation.sales_items.length == 0){
             $scope.validation_error = "Choose Item";
             return false;
-        } else if($scope.quotation.sales_items.length > 0){
-            for (var i=0; i < $scope.quotation.sales_items.length; i++){
-                if (parseInt($scope.quotation.sales_items[i].current_stock) < parseInt($scope.quotation.sales_items[i].qty_sold)){
-                    $scope.validation_error = "Quantity not in stock for item "+$scope.quotation.sales_items[i].item_name;
-                    return false;
-                }
-            }
-        }  
+        } 
         return true;
     }
     $scope.remove_from_item_list = function(item) {
@@ -3342,13 +3321,6 @@ function DeliveryNoteController($scope, $element, $http, $timeout, share, $locat
         } else if ($scope.delivery_note.lpo_no == '') {
             $scope.validation_error = "Enter LPO No";
             return false;
-        } else if($scope.quotation.sales_items.length > 0){
-            for (var i=0; i < $scope.quotation.sales_items.length; i++){
-                if (parseInt($scope.quotation.sales_items[i].current_stock) < parseInt($scope.quotation.sales_items[i].qty_sold)){
-                    $scope.validation_error = "Quantity not in stock for item "+$scope.quotation.sales_items[i].item_name;
-                    return false;
-                }
-            }
         } 
         return true;
     }
@@ -3715,14 +3687,7 @@ function DirectDeliveryNoteController($scope, $element, $http, $timeout, share, 
         } else if($scope.delivery_note.sales_items.length == 0){
             $scope.validation_error = "Choose Item";
             return false;
-        } else if($scope.delivery_note.sales_items.length > 0){
-            for (var i=0; i < $scope.delivery_note.sales_items.length; i++){
-                if (parseInt($scope.delivery_note.sales_items[i].current_stock) < parseInt($scope.delivery_note.sales_items[i].qty_sold)){
-                    $scope.validation_error = "Quantity not in stock for item "+$scope.delivery_note.sales_items[i].item_name;
-                    return false;
-                }
-            }
-        }  
+        } 
         return true;
     }
     $scope.remove_from_item_list = function(item) {
@@ -3955,13 +3920,6 @@ function EditSalesInvoiceController($scope, $element, $location, $http){
         } else if($scope.invoice_details.sales_items.length == 0){
             $scope.validation_error = "Choose Item";
             return false;
-        } else if($scope.invoice_details.sales_items.length > 0){
-            for (var i=0; i < $scope.invoice_details.sales_items.length; i++){
-                if (parseInt($scope.invoice_details.sales_items[i].current_stock) < parseInt($scope.invoice_details.sales_items[i].qty_sold)){
-                    $scope.validation_error = "Quantity not in stock for item "+$scope.invoice_details.sales_items[i].item_name;
-                    return false;
-                }
-            }
         } else if( $scope.invoice_details.payment_mode == 'card' && ($scope.invoice_details.card_number == '' )) {
             $scope.validation_error = 'Please Enter Card Number';
             return false;
@@ -4265,14 +4223,7 @@ function EditQuotationController($scope, $element, $http, $timeout, share, $loca
         } else if($scope.quotation.sales_items.length == 0){
             $scope.validation_error = "Choose Item";
             return false;
-        } else if($scope.quotation.sales_items.length > 0){
-            for (var i=0; i < $scope.quotation.sales_items.length; i++){
-                if (parseInt($scope.quotation.sales_items[i].current_stock) < parseInt($scope.quotation.sales_items[i].qty_sold)){
-                    $scope.validation_error = "Quantity not in stock for item "+$scope.quotation.sales_items[i].item_name;
-                    return false;
-                }
-            }
-        }  
+        } 
         return true;
     }
     $scope.remove_from_item_list = function(item) {
@@ -4450,13 +4401,6 @@ function EditDeliveryController($scope, $element, $http, $timeout, share, $locat
         if($scope.delivery_note.sales_items.length == 0){
             $scope.validation_error = "Choose Item";
             return false;
-        } else if($scope.delivery_note.sales_items.length > 0){
-            for (var i=0; i < $scope.delivery_note.sales_items.length; i++){
-                if (parseInt($scope.delivery_note.sales_items[i].current_stock) < parseInt($scope.delivery_note.sales_items[i].qty_sold)){
-                    $scope.validation_error = "Quantity not in stock for item "+$scope.delivery_note.sales_items[i].item_name;
-                    return false;
-                }
-            }
         }  
         return true;
     }
