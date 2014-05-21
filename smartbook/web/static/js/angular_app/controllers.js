@@ -3271,10 +3271,6 @@ function DeliveryNoteController($scope, $element, $http, $timeout, share, $locat
         }
     }
     $scope.calculate_net_amount_sale = function(item) {
-        if(parseInt(item.qty_sold) > parseInt(item.current_stock)) {
-            $scope.validation_error = "Qauntity not in stock";
-            return false;
-        }
         if(item.qty_sold != '' && item.unit_price != ''){
             $scope.validation_error = "";
             item.net_amount = ((parseFloat(item.qty_sold)*parseFloat(item.unit_price))-parseFloat(item.disc_given)).toFixed(2);
@@ -4193,16 +4189,11 @@ function EditQuotationController($scope, $element, $http, $timeout, share, $loca
     }
     
     $scope.calculate_net_amount_sale = function(item) {
-        $scope.validation_error = "";
-        if(parseInt(item.qty_sold) > parseInt(item.current_stock)) {
-            $scope.validation_error = "Qauntity not in stock";
-            return false;
-        } else {
-            if(item.qty_sold != '' && item.unit_price != ''){
-                item.net_amount = ((parseFloat(item.qty_sold)*parseFloat(item.unit_price))).toFixed(2);
-            }
-            $scope.calculate_net_total_amount();
+    
+        if(item.qty_sold != '' && item.unit_price != ''){
+            item.net_amount = ((parseFloat(item.qty_sold)*parseFloat(item.unit_price))).toFixed(2);
         }
+        $scope.calculate_net_total_amount();
     }
 
     $scope.calculate_net_total_amount = function() {
