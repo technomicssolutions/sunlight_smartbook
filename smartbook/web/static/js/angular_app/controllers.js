@@ -2948,6 +2948,7 @@ function StockEditController($scope, $http, $element, $location, $timeout) {
     }
     $scope.validate = function() {
         $scope.validation_error = '';
+        console.log($scope.stock.discount_permit_amount,$scope.stock.discount_permit_percent);
         if($scope.stock.quantity == '' || $scope.stock.quantity == undefined ) {
             $scope.validation_error = "Please enter quantity";
             return false;
@@ -2956,9 +2957,6 @@ function StockEditController($scope, $http, $element, $location, $timeout) {
             return false;
         } else if($scope.stock.selling_price == '' || $scope.stock.selling_price == undefined) {
             $scope.validation_error = "Please enter selling price";
-            return false;
-        } else if($scope.stock.discount_permit_amount == '' || $scope.stock.discount_permit_amount == undefined || $scope.stock.discount_permit_percent == '' || $scope.stock.discount_permit_percent == undefined) {
-            $scope.validation_error = "Please enter discount";
             return false;
         } else if( $scope.stock.quantity != Number($scope.stock.quantity)){
             $scope.validation_error = "Please enter digits as quantity ";
@@ -2969,10 +2967,10 @@ function StockEditController($scope, $http, $element, $location, $timeout) {
         } else if( $scope.stock.selling_price != Number($scope.stock.selling_price)){
             $scope.validation_error = "Please enter digits as selling price ";
             return false;
-        }else if( $scope.stock.discount_permit_amount != '' && $scope.stock.discount_permit_amount != Number($scope.stock.discount_permit_amount)){
+        } else if( $scope.stock.discount_permit_amount != Number($scope.stock.discount_permit_amount)){
             $scope.validation_error = "Please enter digits as discount amount ";
             return false;
-        }else if( $scope.stock.discount_permit_percent != '' && $scope.stock.discount_permit_percent != Number($scope.stock.discount_permit_percent)){
+        } else if( $scope.stock.discount_permit_percent != Number($scope.stock.discount_permit_percent)){
             $scope.validation_error = "Please enter digits as discount percent ";
             return false;
         } else {

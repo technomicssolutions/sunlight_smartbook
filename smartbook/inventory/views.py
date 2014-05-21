@@ -123,7 +123,7 @@ class ItemList(View):
 
 class StockView(View):
     def get(self, request, *args, **kwargs):
-        inventory = Inventory.objects.all()
+        inventory = Inventory.objects.all().order_by('id')
         ctx = {
             'inventory': inventory
         }
