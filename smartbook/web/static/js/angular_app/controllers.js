@@ -1765,7 +1765,9 @@ function SalesController($scope, $element, $http, $timeout, share, $location) {
     }
     $scope.get_latest_sales_details = function(item) {
         $scope.no_customer_error_flag = false;
-        var customer_name = $scope.customer;
+        var name_of_customer = $scope.customer;
+        var customer_name = name_of_customer.replace(/\s+/g, '_')
+        console.log(customer_name);
         var name_of_item = item.item_name;
         var item_name = name_of_item.replace(/\s+/g, '_');
         console.log(item_name);
