@@ -3878,8 +3878,12 @@ function EditSalesInvoiceController($scope, $element, $location, $http){
         $scope.invoice_details.total_amount = total_amount;
     }
     $scope.get_latest_sales_details = function(item) {
-        var customer_name = $scope.invoice_details.customer;
-        var item_name = item.item_name;
+        var name_of_customer = $scope.invoice_details.customer;
+        var customer_name = name_of_customer.replace(/\s+/g, '_')
+        console.log(customer_name);
+        var name_of_item = item.item_name;
+        var item_name = name_of_item.replace(/\s+/g, '_');
+        console.log(item_name);
         $scope.latest_sales = []
         $http.get('/sales/latest_sales_details/?customer='+customer_name+'&item_name='+item_name).success(function(data)
         {   

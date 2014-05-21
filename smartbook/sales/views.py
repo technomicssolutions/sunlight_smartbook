@@ -359,7 +359,7 @@ class DeliveryNotePDF(View):
                 y = y-40
 
                 if y <= 270:
-                    y = 800
+                    y = 760
                     p.showPage()
 
                 data1 = [[i, q_item.item.code, q_item.item.name, q_item.quantity_sold, q_item.item.uom.uom]]
@@ -371,7 +371,7 @@ class DeliveryNotePDF(View):
             for delivery_item in delivery_note.deliverynoteitem_set.all():
                 y = y-40
                 if y <= 270:
-                    y = 800
+                    y = 760
                     p.showPage()
 
                 data1 = [[i, delivery_item.item.code, delivery_item.item.name, delivery_item.quantity_sold, delivery_item.item.uom.uom]]
@@ -1146,7 +1146,7 @@ class CreateSalesInvoicePDF(View):
                    
             y = y-30
             if y <= 270:
-                y = 790
+                y = 760
                 p.showPage()
             
             item_price = s_item.selling_price
@@ -1159,7 +1159,7 @@ class CreateSalesInvoicePDF(View):
             i = i + 1
         y = 600
         if y <= 270:
-            y = 800
+            y = 760
             p.showPage()
         total_amount = sales.net_amount
         try:
