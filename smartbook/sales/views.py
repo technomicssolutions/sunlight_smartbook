@@ -365,7 +365,7 @@ class DeliveryNotePDF(View):
                 data1 = [[i, q_item.item.code, q_item.item.name, q_item.quantity_sold, q_item.item.uom.uom]]
                 table = Table(data1, colWidths=[80, 120, 400, 90, 100], rowHeights=40, style = style)
                 table.wrapOn(p, 200, 600)
-                table.drawOn(p, 10, y)
+                table.drawOn(p, 20, y)
                 i = i + 1
         if delivery_note.deliverynoteitem_set.all().count() > 0:
             for delivery_item in delivery_note.deliverynoteitem_set.all():
@@ -377,7 +377,7 @@ class DeliveryNotePDF(View):
                 data1 = [[i, delivery_item.item.code, delivery_item.item.name, delivery_item.quantity_sold, delivery_item.item.uom.uom]]
                 table = Table(data1, colWidths=[80, 120, 400, 90, 100], rowHeights=40, style = style)
                 table.wrapOn(p, 200, 600)
-                table.drawOn(p, 10, y)
+                table.drawOn(p, 20, y)
                 i = i + 1
         p.showPage()
         p.save()
@@ -1155,7 +1155,7 @@ class CreateSalesInvoicePDF(View):
             data1=[[i, s_item.item.code, s_item.item.name, s_item.quantity_sold, s_item.item.uom.uom, s_item.selling_price.quantize(TWOPLACES), s_item.net_amount]]
             table = Table(data1, colWidths=[50, 100, 440, 80, 90, 100, 50], rowHeights=40, style=style)
             table.wrapOn(p, 200, 400)
-            table.drawOn(p,10,y)
+            table.drawOn(p,20,y)
             i = i + 1
         y = 600
         if y <= 270:
