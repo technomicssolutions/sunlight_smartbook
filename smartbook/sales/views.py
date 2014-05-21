@@ -1416,7 +1416,9 @@ class LatestSalesDetails(View):
     def get(self, request, *args, **kwargs):
 
         customer_name = request.GET.get('customer', '')
-        item_name = request.GET.get('item_name', '')
+        name_of_item = request.GET.get('item_name', '')
+        item_name = name_of_item.replace('_', ' ')
+        print item_name
         sales_details = (SalesItem.objects.filter(item__name=item_name, sales__customer__customer_name=customer_name).order_by('-id'))[:3]
         
         ctx_sales_details = []

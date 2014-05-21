@@ -1207,7 +1207,9 @@ function SalesQNDNController($scope, $element, $http, $timeout, share, $location
 
     $scope.get_latest_sales_details = function(item) {
         var customer_name = $scope.sales.customer;
-        var item_name = item.item_name;
+        var name_of_item = item.item_name;
+        var item_name = name_of_item.replace(/\s+/g, '_');
+        console.log(item_name);
         $scope.latest_sales = []
         $http.get('/sales/latest_sales_details/?customer='+customer_name+'&item_name='+item_name).success(function(data)
         {   
@@ -1764,7 +1766,9 @@ function SalesController($scope, $element, $http, $timeout, share, $location) {
     $scope.get_latest_sales_details = function(item) {
         $scope.no_customer_error_flag = false;
         var customer_name = $scope.customer;
-        var item_name = item.item_name;
+        var name_of_item = item.item_name;
+        var item_name = name_of_item.replace(/\s+/g, '_');
+        console.log(item_name);
         $scope.latest_sales = []
         if (customer_name != 'select'){
             $scope.no_customer_error_flag = false;
