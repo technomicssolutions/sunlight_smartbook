@@ -949,7 +949,9 @@ class QuotationDeliverynoteSales(View):
         sales.sales_invoice_date = datetime.strptime(sales_dict['sales_invoice_date'], '%d/%m/%Y')
         quotation = ''
 
+        print sales_dict
         customer = Customer.objects.get(customer_name = sales_dict['customer'])
+        print customer
 
         if sales_dict['quotation_ref_no']:
             quotation = Quotation.objects.get(reference_id=sales_dict['quotation_ref_no'])
