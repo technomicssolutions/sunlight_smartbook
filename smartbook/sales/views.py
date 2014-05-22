@@ -959,8 +959,8 @@ class QuotationDeliverynoteSales(View):
 
         print sales_dict
         customer = Customer.objects.get(customer_name = sales_dict['customer'])
-        print customer
-
+        sales.customer = customer
+        sales.save()
         if sales_dict['quotation_ref_no']:
             quotation = Quotation.objects.get(reference_id=sales_dict['quotation_ref_no'])
             for q_item in quotation.quotationitem_set.all():
