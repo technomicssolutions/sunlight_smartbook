@@ -91,6 +91,8 @@ class SalesEntry(View):
             item = Item.objects.get(code=sales_item['item_code'])
             s_item, item_created = SalesItem.objects.get_or_create(item=item, sales=sales)
             inventory, created = Inventory.objects.get_or_create(item=item)
+            inventory.quantity = int(sales_item["current_stock"])
+            inventory.save()
             if sales_created:
 
                 inventory.quantity = inventory.quantity - int(sales_item['qty_sold'])
@@ -270,6 +272,8 @@ class CreateQuotation(View):
                 item = Item.objects.get(code=quotation_item['item_code'])
                 quotation_item_obj, item_created = QuotationItem.objects.get_or_create(item=item, quotation=quotation)
                 inventory, created = Inventory.objects.get_or_create(item=item)
+                inventory.quantity = int(quotation_item['current_stock'])
+                inventory.save()
                 inventory.quantity = inventory.quantity - int(quotation_item['qty_sold'])
                 inventory.save()
                 quotation_item_obj.net_amount = float(quotation_item['net_amount'])
@@ -719,6 +723,8 @@ class CreateDeliveryNote(View):
                 if q_item.item.name not in quotation_item_names:
                     item = q_item.item 
                     inventory, created = Inventory.objects.get_or_create(item=item)
+                    inventory.quantity = int(item_data["current_stock"])
+                    inventory.save()
                     inventory.quantity = inventory.quantity + int(q_item.quantity_sold)
                     inventory.save()
                     q_item.delete()
@@ -728,6 +734,8 @@ class CreateDeliveryNote(View):
                             if q_item.quantity_sold != int(item_data['qty_sold']):
                                 item = q_item.item
                                 inventory, created = Inventory.objects.get_or_create(item=item)
+                                inventory.quantity = int(item_data["current_stock"])
+                                inventory.save()
                                 inventory.quantity = inventory.quantity + int(q_item.quantity_sold)
                                 inventory.save()
                                 inventory.quantity = inventory.quantity - int(item_data['qty_sold'])
@@ -962,6 +970,9 @@ class QuotationDeliverynoteSales(View):
                 if q_item.item.name not in quotation_item_names:
                     item = q_item.item 
                     inventory, created = Inventory.objects.get_or_create(item=item)
+                    inventory.quantity = int(item_data["current_stock"])
+                    inventory.save()   
+                    print "inventory.quantity =", inventory.quantity, int(item_data["current_stock"])
                     inventory.quantity = inventory.quantity + int(q_item.quantity_sold)
                     inventory.save()
                     q_item.delete()
@@ -971,6 +982,9 @@ class QuotationDeliverynoteSales(View):
                             if q_item.quantity_sold != int(item_data['qty_sold']):
                                 item = q_item.item
                                 inventory, created = Inventory.objects.get_or_create(item=item)
+                                inventory.quantity = int(item_data["current_stock"])
+                                print "inventory.quantity =", inventory.quantity, int(item_data["current_stock"])
+                                inventory.save()
                                 inventory.quantity = inventory.quantity + int(q_item.quantity_sold)
                                 inventory.save()
                                 inventory.quantity = inventory.quantity - int(item_data['qty_sold'])
@@ -1001,6 +1015,8 @@ class QuotationDeliverynoteSales(View):
                 if q_item.item.name not in delivery_note_item_names:
                     item = q_item.item 
                     inventory, created = Inventory.objects.get_or_create(item=item)
+                    inventory.quantity = int(item_data["current_stock"])
+                    inventory.save()
                     inventory.quantity = inventory.quantity + int(q_item.quantity_sold)
                     inventory.save()
                     q_item.delete()
@@ -1010,6 +1026,8 @@ class QuotationDeliverynoteSales(View):
                             if q_item.quantity_sold != int(item_data['qty_sold']):
                                 item = q_item.item
                                 inventory, created = Inventory.objects.get_or_create(item=item)
+                                inventory.quantity = int(item_data["current_stock"])
+                                inventory.save()
                                 inventory.quantity = inventory.quantity + int(q_item.quantity_sold)
                                 inventory.save()
                                 inventory.quantity = inventory.quantity - int(item_data['qty_sold'])
@@ -1498,6 +1516,8 @@ class DirectDeliveryNote(View):
                 item = Item.objects.get(code=delivery_note_item['item_code'])
                 delivery_note_item_obj, item_created = DeliveryNoteItem.objects.get_or_create(item=item, delivery_note=delivery_note)
                 inventory, created = Inventory.objects.get_or_create(item=item)
+                inventory.quantity = int(delivery_note_item["current_stock"])
+                inventory.save()
                 inventory.quantity = inventory.quantity - int(delivery_note_item['qty_sold'])
                 inventory.save()
                 delivery_note_item_obj.net_amount = float(delivery_note_item['net_amount'])
@@ -1538,6 +1558,8 @@ class EditSalesInvoice(View):
             if s_item.item.name not in s_item_names:
                 item = s_item.item 
                 inventory, created = Inventory.objects.get_or_create(item=item)
+                inventory.quantity = int(item_data["current_stock"])
+                inventory.save()
                 inventory.quantity = inventory.quantity + int(s_item.quantity_sold)
                 inventory.save()
                 s_item.delete()
@@ -1546,6 +1568,8 @@ class EditSalesInvoice(View):
                     item = Item.objects.get(code=item_data['item_code'])
                     s_item, item_created = SalesItem.objects.get_or_create(item=item, sales=sales)
                     inventory, created = Inventory.objects.get_or_create(item=item)
+                    inventory.quantity = int(item_data["current_stock"])
+                    inventory.save()
                     if item_created:
 
                         inventory.quantity = inventory.quantity - int(item_data['qty_sold'])
@@ -1568,6 +1592,8 @@ class EditSalesInvoice(View):
                 item = Item.objects.get(code=item_data['item_code'])
                 s_item, item_created = SalesItem.objects.get_or_create(item=item, sales=sales)
                 inventory, created = Inventory.objects.get_or_create(item=item)
+                inventory.quantity = int(item_data["current_stock"])
+                inventory.save()
                 if item_created:
 
                     inventory.quantity = inventory.quantity - int(item_data['qty_sold'])
@@ -1634,6 +1660,8 @@ class EditQuotation(View):
                 if q_item.item.name not in q_item_names:
                     item = q_item.item 
                     inventory, created = Inventory.objects.get_or_create(item=item)
+                    inventory.quantity = int(item_data['current_stock'])
+                    inventory.save()
                     inventory.quantity = inventory.quantity + int(q_item.quantity_sold)
                     inventory.save()
                     q_item.delete()
@@ -1642,6 +1670,8 @@ class EditQuotation(View):
                         item = Item.objects.get(code=item_data['item_code'])
                         q_item, item_created = QuotationItem.objects.get_or_create(item=item, quotation=quotation)
                         inventory, created = Inventory.objects.get_or_create(item=item)
+                        inventory.quantity = int(item_data['current_stock'])
+                        inventory.save()
                         if item_created:
 
                             inventory.quantity = inventory.quantity - int(item_data['qty_sold'])
@@ -1661,6 +1691,8 @@ class EditQuotation(View):
                     item = Item.objects.get(code=item_data['item_code'])
                     q_item, item_created = QuotationItem.objects.get_or_create(item=item, quotation=quotation)
                     inventory, created = Inventory.objects.get_or_create(item=item)
+                    inventory.quantity = int(item_data["current_stock"])
+                    inventory.save()
                     if item_created:
 
                         inventory.quantity = inventory.quantity - int(item_data['qty_sold'])
@@ -1716,6 +1748,8 @@ class EditDeliveryNote(View):
                     if q_item.item.name not in q_item_names:
                         item = q_item.item 
                         inventory, created = Inventory.objects.get_or_create(item=item)
+                        inventory.quantity = int(item_data["current_stock"])
+                        inventory.save()
                         inventory.quantity = inventory.quantity + int(q_item.quantity_sold)
                         inventory.save()
                         q_item.delete()
@@ -1726,6 +1760,8 @@ class EditDeliveryNote(View):
                             if quotation_item.count() > 0:
                                 q_item = quotation_item[0]
                                 inventory, created = Inventory.objects.get_or_create(item=item)
+                                inventory.quantity = int(item_data["current_stock"])
+                                inventory.save()
                                 inventory.quantity = inventory.quantity + q_item.quantity_sold - int(item_data['qty_sold'])      
 
                                 inventory.save()
@@ -1749,6 +1785,8 @@ class EditDeliveryNote(View):
                     if d_item.item.name not in d_item_names:
                         item = d_item.item 
                         inventory, created = Inventory.objects.get_or_create(item=item)
+                        inventory.quantity = int(item_data["current_stock"])
+                        inventory.save()
                         inventory.quantity = inventory.quantity + int(d_item.quantity_sold)
                         inventory.save()
                         d_item.delete()
@@ -1759,6 +1797,8 @@ class EditDeliveryNote(View):
                             if delivery_note_item.count() > 0:
                                 d_item = delivery_note_item[0]
                                 inventory, created = Inventory.objects.get_or_create(item=item)
+                                inventory.quantity = int(item_data["current_stock"])
+                                inventory.save()
                                 inventory.quantity = inventory.quantity + d_item.quantity_sold - int(item_data['qty_sold'])      
 
                                 inventory.save()
@@ -1779,6 +1819,8 @@ class EditDeliveryNote(View):
                     item = Item.objects.get(code=item_data['item_code'])
                     d_item, item_created = DeliveryNoteItem.objects.get_or_create(item=item, delivery_note=delivery_note)
                     inventory, created = Inventory.objects.get_or_create(item=item)
+                    inventory.quantity = int(item_data["current_stock"])
+                    inventory.save()
                     if item_created:
                         inventory.quantity = inventory.quantity - int(item_data['qty_sold'])
                     inventory.save()
