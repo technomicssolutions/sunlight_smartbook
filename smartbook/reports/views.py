@@ -137,7 +137,7 @@ class SalesReports(View):
                                 avg_cp = cost_price/i 
 
                             total = selling_price * qty
-                            profit = inventory.selling_price - inventory.unit_price
+                            profit = (inventory.selling_price - inventory.unit_price) * qty
                             #profit = round(((selling_price - avg_cp)*qty) - discount,0)
                             avg_cp = math.ceil(avg_cp*100)/100                           
                             grant_total = grant_total + total
@@ -254,7 +254,7 @@ class SalesReports(View):
                             avg_cp = cost_price/i
                         total = selling_price * total_qty
                         # profit = (selling_price - avg_cp)*total_qty
-                        profit = inventory.selling_price - inventory.unit_price
+                        profit = (inventory.selling_price - inventory.unit_price) * total_qty
 
                         total_profit = total_profit + profit
                         total_discount = total_discount + discount
@@ -348,7 +348,10 @@ class SalesReports(View):
                 y = 850
                 
                 customer = Customer.objects.get(customer_name = customer_name)
-                sales = Sales.objects.filter(sales_invoice_date__gte=start_date,sales_invoice_date__lte=end_date,customer=customer)
+                print "customer object= ", customer
+                #sales = Sales.objects.filter(sales_invoice_date__gte=start_date,sales_invoice_date__lte=end_date,customer=customer)
+                sales = Sales.objects.filter(customer=customer)
+                print "sales=", sales
                 if sales.count()>0:
                     for sale in sales:
                         items = sale.salesitem_set.all()
@@ -375,7 +378,7 @@ class SalesReports(View):
                                 avg_cp = cost_price/i
                             # profit = (selling_price - avg_cp)*qty
                            
-                            profit = inventory.selling_price - inventory.unit_price
+                            profit = (inventory.selling_price - inventory.unit_price)*qty
 
                             total_profit = total_profit + profit
                             total_discount = total_discount + discount                            
@@ -496,7 +499,7 @@ class SalesReports(View):
                                     i = i + 1
                                 avg_cp = cost_price/i
                             # profit = (selling_price - avg_cp)*qty
-                            profit = inventory.selling_price - inventory.unit_price
+                            profit = (inventory.selling_price - inventory.unit_price) * qty
 
                             total_profit = total_profit + profit
                             total_discount = total_discount + discount                            

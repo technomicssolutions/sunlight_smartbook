@@ -394,77 +394,60 @@ class CreateQuotationPdf(View):
         quotation = Quotation.objects.get(id=quotation_id)
 
         response = HttpResponse(content_type='application/pdf')
-        p = canvas.Canvas(response, pagesize=(1000, 1000))
+        p = canvas.Canvas(response, pagesize=(1000, 1200))
 
         status_code = 200
-        y = 915
+        y = 1100
 
         style = [
             ('FONTSIZE', (0,0), (-1, -1), 16),
             ('FONTNAME',(0,0),(-1,-1),'Helvetica') 
-            # ('INNERGRID', (0,0), (-1,1), 0.25, colors.black),
         ]
 
         style1 = [
             ('FONTSIZE', (0,0), (-1, -1), 18),
             ('FONTNAME',(0,0),(-1,-1),'Helvetica') 
-            # ('INNERGRID', (0,0), (-1,1), 0.25, colors.black),
         ]
 
         try:
             owner_company = OwnerCompany.objects.latest('id')
             if owner_company.logo:
-                print "30*cm", 30*cm, cm
-                path = settings.PROJECT_ROOT.replace("\\", "/")+"/media/"+owner_company.logo.name
-                p.drawImage(path, 7*cm, 27*cm, width=20*cm, preserveAspectRatio=True)
+                path = settings.PROJECT_ROOT.replace("\\", "/")+"/quotation_header/Header.jpg"
+                p.drawImage(path, 70, 1000, width=30*cm, preserveAspectRatio=True)
         except:
             pass
 
-
-        p.roundRect(80, y-130, 840, 0.5*inch, 10, stroke=1, fill=0)
+        p.roundRect(80, y-100, 840, 0.5*inch, 10, stroke=1, fill=0)
         p.setFont("Helvetica-Bold", 20)
-        p.drawString(400, 800, "QUOTATION")
-        p.roundRect(80, y-250, 840, 120, 20, stroke=1, fill=0)   
+        p.drawString(400, y-90, "QUOTATION")
+        p.roundRect(80, y-220, 840, 120, 20, stroke=1, fill=0)   
 
 
         data=[['To                     :', quotation.to.customer_name]]
         table = Table(data, colWidths=[125, 400], rowHeights=40, style = style)      
         table.wrapOn(p, 200, 400)
-        table.drawOn(p,160, 745)
+        table.drawOn(p,160, y-130)
 
         data=[['Attention           :', quotation.attention]]
         table = Table(data, colWidths=[125, 400], rowHeights=40, style = style)       
         table.wrapOn(p, 200, 400)
-        table.drawOn(p,160, 715)
+        table.drawOn(p,160, y-160)
 
         data=[['Subject             :', quotation.subject]]
         table = Table(data, colWidths=[125, 400], rowHeights=40, style = style)       
         table.wrapOn(p, 200, 400)
-        table.drawOn(p,160, 685)
+        table.drawOn(p,160, y-190)
 
 
         data=[['Date            :', quotation.date.strftime('%d-%m-%Y')]]
         table = Table(data, colWidths=[100, 400], rowHeights=40, style = style)       
         table.wrapOn(p, 200, 400)
-        table.drawOn(p,700, 745)
+        table.drawOn(p,700, y-130)
 
         data=[['Ref. id         :', quotation.reference_id]]
         table = Table(data, colWidths=[100, 400], rowHeights=40, style = style)        
         table.wrapOn(p, 200, 400)
-        table.drawOn(p,700, 715)
-
-
-        # data=[['Sl.No:', 'Description', 'Qty', 'Unit Price', 'Amount(AED)']]
-
-        # table = Table(data, colWidths=[100, 350, 100, 125, 125], rowHeights=40, style = style1)
-        # table.setStyle(TableStyle([                                  
-        #                            ('BOX', (0,0), (-1,-1), 0.25, colors.black),
-        #                            ('VALIGN',(0,-1),(-1,-1),'MIDDLE'),
-        #                            # ('LINEBEFORE',(1,0), (0,-1),1,colors.black),                                  
-        #                            ]))
-        # table.wrapOn(p, 200, 400)
-        # table.drawOn(p,105,575)
-
+        table.drawOn(p, 700, y-160)
 
         data=[['Sl.No:']]
 
@@ -475,7 +458,7 @@ class CreateQuotationPdf(View):
                                    ('ALIGN',(0,-1),(-1,-1),'CENTRE'),                               
                                    ]))
         table.wrapOn(p, 200, 400)
-        table.drawOn(p,105,575)
+        table.drawOn(p, 105, y-300)
 
         data=[['Description']]
 
@@ -486,7 +469,7 @@ class CreateQuotationPdf(View):
                                    ('ALIGN',(0,-1),(-1,-1),'CENTRE'),                                                                    
                                    ]))
         table.wrapOn(p, 200, 400)
-        table.drawOn(p,205,575)
+        table.drawOn(p, 205, y-300)
 
         data=[['Qty']]
 
@@ -497,7 +480,7 @@ class CreateQuotationPdf(View):
                                    ('ALIGN',(0,-1),(-1,-1),'CENTRE'),                                
                                    ]))
         table.wrapOn(p, 200, 400)
-        table.drawOn(p,555,575)
+        table.drawOn(p, 555, y-300)
 
 
         data=[['Unit Price']]
@@ -509,7 +492,7 @@ class CreateQuotationPdf(View):
                                    ('ALIGN',(0,-1),(-1,-1),'CENTRE'),                                 
                                    ]))
         table.wrapOn(p, 200, 400)
-        table.drawOn(p,655,575)
+        table.drawOn(p, 655, y-300)
 
 
         data=[['Amount(AED)']]
@@ -521,22 +504,22 @@ class CreateQuotationPdf(View):
                                    ('ALIGN',(0,-1),(-1,-1),'CENTRE'),                                
                                    ]))
         table.wrapOn(p, 200, 400)
-        table.drawOn(p,780,575)
+        table.drawOn(p, 780, y-300)
 
-        y = 575
+        y = y-340
 
-        i = 0 
-        i = i + 1
-
-        for q_item in quotation.quotationitem_set.all():   
-            if y <= 215:
+        i = 1 
+        
+        for q_item in quotation.quotationitem_set.all():             
+            
+            if y < 160:
                 path = settings.PROJECT_ROOT.replace("\\", "/")+"/quotation_header/Footer.jpg"
-                p.drawImage(path, 7*cm, 5, width=20*cm, preserveAspectRatio=True)
+                p.drawImage(path, 70, 5, width=30*cm, preserveAspectRatio=True)
                 p.showPage()
-                y = 915          
-
-            y = y-40
-
+                y = 1000
+                path = settings.PROJECT_ROOT.replace("\\", "/")+"/quotation_header/Header.jpg"
+                p.drawImage(path, 70, 1000, width=30*cm, preserveAspectRatio=True)             
+            print "y=", y, i              
             data1=[[i]]
             table = Table(data1, colWidths=[100], rowHeights=40, style = style)
             table.setStyle(TableStyle([                                      
@@ -588,6 +571,15 @@ class CreateQuotationPdf(View):
             table.drawOn(p,780, y)
 
             i = i + 1
+            y = y-40  
+
+        if y < 160:
+            path = settings.PROJECT_ROOT.replace("\\", "/")+"/quotation_header/Footer.jpg"
+            p.drawImage(path, 70, 0, width=30*cm, preserveAspectRatio=True)
+            p.showPage()
+            y = 1000
+            path = settings.PROJECT_ROOT.replace("\\", "/")+"/quotation_header/Header.jpg"
+            p.drawImage(path, 70, 1000, width=30*cm, preserveAspectRatio=True)
 
         total_amount_in_words = num2words(quotation.net_total).title() + ' Only'            
 
@@ -600,7 +592,7 @@ class CreateQuotationPdf(View):
                                    ('ALIGN', (0,0), (-1,-1),'CENTRE'),
                                    ]))
         table.wrapOn(p, 200, 400)
-        table.drawOn(p,105,y-40)
+        table.drawOn(p, 105, y)
 
         data=[[quotation.net_total]]
 
@@ -611,14 +603,19 @@ class CreateQuotationPdf(View):
                                    ('ALIGN', (0,0), (-1,-1),'RIGHT'),
                                    ]))
         table.wrapOn(p, 200, 400)
-        table.drawOn(p, 780,y-40)
+        table.drawOn(p, 780, y)
 
 
         p.setFont("Helvetica", 15)
-        if y <= 200:
+        
+        if y <= 360:
+            path = settings.PROJECT_ROOT.replace("\\", "/")+"/quotation_header/Footer.jpg"
+            p.drawImage(path, 70, 0, width=30*cm, preserveAspectRatio=True)
             p.showPage()
-            y = 915
-        y=320
+            y = 1000
+            path = settings.PROJECT_ROOT.replace("\\", "/")+"/quotation_header/Header.jpg"
+            p.drawImage(path, 70, 1000, width=30*cm, preserveAspectRatio=True)
+        y=330
         var = 25
         p.drawString(110, y, "Hope the above quoted prices will meet your satisfaction and for further information please do not hesitate to contact us.")
         p.drawString(110, y-var, "Delivery     : " + str(quotation.delivery))
@@ -630,7 +627,7 @@ class CreateQuotationPdf(View):
         p.drawString(110, y-(var*7), "Authorized Signatory")
         p.drawString(700, y-(var*7), "Prepared By")
         path = settings.PROJECT_ROOT.replace("\\", "/")+"/quotation_header/Footer.jpg"
-        p.drawImage(path, 7*cm, 5, width=20*cm, preserveAspectRatio=True)
+        p.drawImage(path, 70, 0, width=30*cm, preserveAspectRatio=True)
         p.showPage()
         p.save()
         return response
@@ -901,7 +898,6 @@ class QuotationDeliverynoteSales(View):
         sales.sales_invoice_date = datetime.strptime(sales_dict['sales_invoice_date'], '%d/%m/%Y')
         quotation = ''
 
-        print sales_dict
         customer = Customer.objects.get(customer_name = sales_dict['customer'])
         sales.customer = customer
         sales.save()
@@ -916,7 +912,6 @@ class QuotationDeliverynoteSales(View):
                     inventory, created = Inventory.objects.get_or_create(item=item)
                     inventory.quantity = int(item_data["current_stock"])
                     inventory.save()   
-                    print "inventory.quantity =", inventory.quantity, int(item_data["current_stock"])
                     inventory.quantity = inventory.quantity + int(q_item.quantity_sold)
                     inventory.save()
                     q_item.delete()
