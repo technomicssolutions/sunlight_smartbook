@@ -91,7 +91,6 @@ class SalesReports(View):
                 }
                 return render(request, 'reports/sales_reports.html', ctx) 
 
-                 
             else:
 
                 start_date = datetime.strptime(start, '%d/%m/%Y')
@@ -100,12 +99,11 @@ class SalesReports(View):
                 p.drawString(350, 900, 'Date Wise Sales Report')
                 p.setFontSize(13)
                 p.drawString(50, 875, "Date")
-                p.drawString(150, 875, "Invoice Number")
-                p.drawString(250, 875, "Item Name")
-                p.drawString(350, 875, "Quantity")
-                p.drawString(450, 875, "Discount")
-                p.drawString(550, 875, "Selling Price")
-                p.drawString(650,875, "Average Cost Price")
+                p.drawString(130, 875, "Invoice Number")
+                p.drawString(270, 875, "Item Name")               
+                p.drawString(500, 875, "Quantity")
+                p.drawString(600, 875, "Discount")
+                p.drawString(700,875, "Selling Price")
                 p.drawString(800, 875, "Total")
                 p.drawString(900, 875, "Profit")
 
@@ -128,8 +126,7 @@ class SalesReports(View):
                                 selling_price = item.selling_price
                             else:
                                 inventory = inventorys[0]                            
-                                selling_price = inventory.selling_price
-                            	
+                                selling_price = inventory.selling_price                           	
 
                             purchases = item.item.purchaseitem_set.all()
                             avg_cp = 0
@@ -138,7 +135,6 @@ class SalesReports(View):
                                     cost_price = cost_price + purchase.cost_price
                                     i = i + 1
                                 avg_cp = cost_price/i 
-
 
                             total = selling_price * qty
                             # profit = (selling_price - avg_cp)*qty
@@ -157,10 +153,10 @@ class SalesReports(View):
                             p.drawString(50, y, dates.strftime('%d/%m/%y'))
                             p.drawString(150, y, str(invoice_no))
                             p.drawString(250, y, item_name)
-                            p.drawString(350, y, str(qty))
-                            p.drawString(450, y, str(discount))
-                            p.drawString(550, y, str(selling_price))
-                            p.drawString(650,y,str(avg_cp))
+                            p.drawString(510, y, str(qty))
+                            p.drawString(600, y, str(discount))
+                            p.drawString(700, y, str(selling_price))
+                            # p.drawString(650,y,str(avg_cp))
                             p.drawString(800, y, str(total))
                             p.drawString(900, y, str(profit))
                             
@@ -171,22 +167,20 @@ class SalesReports(View):
                 p.drawString(50, y, 'Round Off : '+str(round_off))
                 p.drawString(150, y, '')
                 p.drawString(250, y, '')
-                p.drawString(350, y, '')
-                p.drawString(450, y, str(total_discount))
-                p.drawString(550, y, '')
+                p.drawString(500, y, '')
+                p.drawString(600, y, str(total_discount))
+                p.drawString(700, y, '')
                 p.drawString(800, y, str(grant_total))
                 p.drawString(900, y, str(total_profit))
 
                 p.showPage()
                 p.save()
 
-
         elif report_type == 'item':
 
             start = request.GET['start_date']
             end = request.GET['end_date']
             item_code = request.GET['item']          
-
             
             if not start:            
                 ctx = {
@@ -224,12 +218,12 @@ class SalesReports(View):
                 p.setFontSize(13)
                 p.drawString(50, 875, "Item Code")
                 p.drawString(150, 875, "Item Name")
-                p.drawString(250, 875, "Total Quantity")
-                p.drawString(350, 875, "Discount")
-                p.drawString(450, 875, "Cost Price")
-                p.drawString(550, 875, "Selling Price")
-                p.drawString(650,875, "Total") 
-                p.drawString(750, 875, "Profit")     
+                p.drawString(400, 875, "Total Quantity")
+                p.drawString(500, 875, "Discount")
+                p.drawString(600, 875, "Cost Price")
+                p.drawString(700, 875, "Selling Price")
+                p.drawString(800, 875, "Total") 
+                p.drawString(900, 875, "Profit")     
 
                 y = 850       
                 item = Item.objects.get(code=item_code)
@@ -268,8 +262,7 @@ class SalesReports(View):
                         total_sp = total_sp + selling_price
                         grant_total = grant_total + total
 
-                        avg_cp = math.ceil(avg_cp*100)/100
-                        
+                        avg_cp = math.ceil(avg_cp*100)/100                        
 
                         y = y - 30
                         if y <= 270:
@@ -277,12 +270,12 @@ class SalesReports(View):
                             p.showPage()
                         p.drawString(50, y, str(item_code))
                         p.drawString(150, y, item_name)
-                        p.drawString(250, y, str(total_qty))
-                        p.drawString(350, y, str(discount))
-                        p.drawString(450, y, str(avg_cp))
-                        p.drawString(550, y, str(selling_price))
-                        p.drawString(650,y, str(total)) 
-                        p.drawString(750, y, str(profit))
+                        p.drawString(440, y, str(total_qty))
+                        p.drawString(510, y, str(discount))
+                        p.drawString(610, y, str(avg_cp))
+                        p.drawString(710, y, str(selling_price))
+                        p.drawString(810,y, str(total)) 
+                        p.drawString(910, y, str(profit))
 
                 total_cp = math.ceil(total_cp*100)/100 
 
@@ -292,17 +285,15 @@ class SalesReports(View):
                     p.showPage()
                 p.drawString(50, y, '')
                 p.drawString(150, y, '')
-                p.drawString(250, y, '')
-                p.drawString(350, y, str(total_discount))
-                p.drawString(450, y, str(total_cp))
-                p.drawString(550, y, str(total_sp))
-
-                p.drawString(650, y, str(grant_total))
-                p.drawString(750, y, str(total_profit)) 
+                p.drawString(400, y, '')
+                p.drawString(510, y, str(total_discount))
+                p.drawString(610, y, str(total_cp))
+                p.drawString(710, y, str(total_sp))
+                p.drawString(810, y, str(grant_total))
+                p.drawString(900, y, str(total_profit)) 
 
                 p.showPage()
                 p.save()
-
             
         elif report_type == 'customer':
             start = request.GET['start_date']
@@ -339,25 +330,22 @@ class SalesReports(View):
                 }
                 return render(request, 'reports/sales_reports.html', ctx)
             else:
-
-
                 start_date = datetime.strptime(start, '%d/%m/%Y')
                 end_date = datetime.strptime(end, '%d/%m/%Y')
 
                 p.drawString(350, 900, 'Customer Wise Sales Report')
                 p.setFontSize(13)
                 p.drawString(50, 875, "Date")
-                p.drawString(150, 875, "Invoice Number")
+                p.drawString(130, 875, "Invoice Number")
                 p.drawString(250, 875, "Item Name")
-                p.drawString(350, 875, "Quantity")
-                p.drawString(450, 875, "Discount")
-                p.drawString(550, 875, "Average Cost Price")
+                p.drawString(500, 875, "Quantity")
+                p.drawString(600, 875, "Discount")
+                # p.drawString(700, 875, "Average Cost Price")
                 p.drawString(700, 875, "Selling Price")
                 p.drawString(800, 875, "Total") 
                 p.drawString(900, 875, "Profit")
                 
                 y = 850
-
                 
                 customer = Customer.objects.get(customer_name = customer_name)
                 sales = Sales.objects.filter(sales_invoice_date__gte=start_date,sales_invoice_date__lte=end_date,customer=customer)
@@ -403,9 +391,9 @@ class SalesReports(View):
                             p.drawString(50, y, dates.strftime('%d-%m-%Y'))
                             p.drawString(150, y, str(invoice_no))
                             p.drawString(250, y, item_name)
-                            p.drawString(350, y, str(qty))
-                            p.drawString(450, y, str(discount))
-                            p.drawString(550, y, str(avg_cp))
+                            p.drawString(510, y, str(qty))
+                            p.drawString(600, y, str(discount))
+                            # p.drawString(550, y, str(avg_cp))
                             p.drawString(700, y, str(selling_price))
                             p.drawString(800, y, str(total)) 
                             p.drawString(900, y, str(profit))
@@ -416,16 +404,14 @@ class SalesReports(View):
                 p.drawString(50, y, '')
                 p.drawString(150, y, '')
                 p.drawString(250, y, '')
-                p.drawString(350, y, '')
-                p.drawString(450, y, str(total_discount))
+                p.drawString(500, y, '')
+                p.drawString(600, y, str(total_discount))
                 p.drawString(700, y, str(total_sp))
                 p.drawString(800, y, str(grant_total)) 
                 p.drawString(900, y, str(total_profit))
 
-
                 p.showPage()
                 p.save()
-
             
         elif report_type == 'salesman':
             start = request.GET['start_date']
@@ -459,8 +445,7 @@ class SalesReports(View):
                     'start_date' : start,
                     'end_date' : end,
                     'salesman' : salesman_name,
-                    'report_type' : 'salesman',
-                    
+                    'report_type' : 'salesman',                    
                 }
                 return render(request, 'reports/sales_reports.html', ctx)
             else:
@@ -480,11 +465,10 @@ class SalesReports(View):
                 p.drawString(800, 875, "Total") 
                 p.drawString(900, 875, "Profit")
 
-                y = 850
+                y = 850                
                 
-                
-                desig = Designation.objects.get(title = 'salesman')                
-                salesmen = Staff.objects.filter(designation = desig, user__first_name=salesman_name)                
+                # desig = Designation.objects.get(title = 'salesman')                
+                salesmen = User.objects.filter(first_name=salesman_name)                
                 sales = Sales.objects.filter(sales_invoice_date__gte=start_date,sales_invoice_date__lte=end_date,salesman=salesmen)
                 
                 if sales.count()>0:                    
@@ -546,18 +530,15 @@ class SalesReports(View):
                 p.drawString(800, y, str(grant_total)) 
                 p.drawString(900, y, str(total_profit))
 
-
                 p.showPage()
                 p.save()
-
             
         return response
-        
-            
+                   
 
 class PurchaseReports(View):
-    def get(self, request, *args, **kwargs):
-        
+
+    def get(self, request, *args, **kwargs):        
         
         status_code = 200
         total_amount = 0
@@ -595,13 +576,13 @@ class PurchaseReports(View):
             purchases = Purchase.objects.filter(purchase_invoice_date__gte=start_date, purchase_invoice_date__lte=end_date).order_by('purchase_invoice_date')
             p.setFontSize(13)
             p.drawString(50, 850, "Date")
-            p.drawString(150, 850, "Invoice No")
-            p.drawString(250, 850, "Vendor Invoice")
-            p.drawString(350, 850, "Item code")
-            p.drawString(450, 850, "Item name")
-            p.drawString(550, 850, "Unit Cost price")
-            p.drawString(650, 850, "Quantity")
-            p.drawString(750, 850, "Amount")
+            p.drawString(130, 850, "Invoice No")
+            p.drawString(220, 850, "Vendor Invoice")
+            p.drawString(340, 850, "Item code")
+            p.drawString(480, 850, "Item name")
+            p.drawString(700, 850, "Unit Cost price")
+            p.drawString(820, 850, "Quantity")
+            p.drawString(900, 850, "Amount")
 
             y = 820
             p.setFontSize(12)
@@ -614,20 +595,20 @@ class PurchaseReports(View):
                         y = 850
                         p.showPage()
                     p.drawString(50, y, purchase_item.purchase.purchase_invoice_date.strftime('%d/%m/%y'))
-                    p.drawString(150, y, str(purchase_item.purchase.purchase_invoice_number))
-                    p.drawString(250, y, str(purchase_item.purchase.vendor_invoice_number))
+                    p.drawString(140, y, str(purchase_item.purchase.purchase_invoice_number))
+                    p.drawString(240, y, str(purchase_item.purchase.vendor_invoice_number))
                     p.drawString(350, y, purchase_item.item.code)
-                    p.drawString(450, y, purchase_item.item.name)
-                    p.drawString(550, y, str(purchase_item.cost_price))
-                    p.drawString(650, y, str(purchase_item.quantity_purchased))
-                    p.drawString(750, y, str(purchase_item.net_amount))
+                    p.drawString(430, y, purchase_item.item.name)
+                    p.drawString(710, y, str(purchase_item.cost_price))
+                    p.drawString(830, y, str(purchase_item.quantity_purchased))
+                    p.drawString(900, y, str(purchase_item.net_amount))
                     total_amount = total_amount + purchase_item.net_amount
-            y = y - 30
+            y = y - 50
             if y <= 270:
                 y = 850
                 p.showPage()
-            p.drawString(650, y, 'Total:')
-            p.drawString(750, y, str(total_amount))
+            p.drawString(830, y, 'Total:')
+            p.drawString(900, y, str(total_amount))
             p.showPage()
             p.save()
         elif report_type == 'vendor':
@@ -649,7 +630,7 @@ class PurchaseReports(View):
             p.drawString(50, 875, "Date")
             p.drawString(150, 875, "Invoice No")
             p.drawString(250, 875, "Vendor Invoice")
-            p.drawString(370, 875, "Amount")
+            p.drawString(390, 875, "Amount")
             p.setFontSize(12)  
             y = 850
             total_amount = 0
@@ -660,16 +641,16 @@ class PurchaseReports(View):
                     y = 850
                     p.showPage()
                 p.drawString(50, y, purchase.purchase_invoice_date.strftime('%d/%m/%y'))
-                p.drawString(150, y, str(purchase.purchase_invoice_number))
-                p.drawString(250, y, str(purchase.vendor_invoice_number))
-                p.drawString(350, y, str(purchase.vendor_amount))
+                p.drawString(160, y, str(purchase.purchase_invoice_number))
+                p.drawString(260, y, str(purchase.vendor_invoice_number))
+                p.drawString(390, y, str(purchase.vendor_amount))
                 total_amount = total_amount + purchase.vendor_amount
-            y = y - 30
+            y = y - 50
             if y <= 270:
                 y = 850
                 p.showPage()
             p.drawString(250, y, 'Total:')
-            p.drawString(350, y, str(total_amount))    
+            p.drawString(390, y, str(total_amount))    
             p.showPage()
             p.save()
                   
@@ -887,7 +868,6 @@ class PurchaseReturnReport(View):
 
     def get(self, request, *args, **kwargs):
 
-
         ctx_purchase_retrun_report = []
         status_code = 200
         response = HttpResponse(content_type='application/pdf')
@@ -927,11 +907,10 @@ class PurchaseReturnReport(View):
             p.setFontSize(13)
             p.drawString(50, 850, "Date")
             p.drawString(150, 850, "Vendor Name")
-            p.drawString(250, 850, "Item Name")
-            p.drawString(350, 850, "Item Code")            
-            p.drawString(450, 850, "Quantity")
-            p.drawString(550, 850, "Amount")  
-                   
+            p.drawString(360, 850, "Item Name")
+            p.drawString(550, 850, "Item Code")            
+            p.drawString(650, 850, "Quantity")
+            p.drawString(750, 850, "Amount")                     
 
             y = 820
             p.setFontSize(12)
@@ -945,28 +924,25 @@ class PurchaseReturnReport(View):
                     purchasereturn_items = purchase_return.purchasereturnitem_set.all()
                     if purchasereturn_items.count()>0:
                         for purchasereturn_item in purchasereturn_items:
-
                             y = y - 30
                             if y <= 270:
                                 y = 850
                                 p.showPage()
                             p.drawString(50, y, purchasereturn_item.purchase_return.date.strftime('%d/%m/%Y'))
                             p.drawString(150, y, purchasereturn_item.purchase_return.purchase.vendor.user.first_name)
-                            p.drawString(250, y, purchasereturn_item.item.name)
-                            p.drawString(350, y, purchasereturn_item.item.code)                   
-                            p.drawString(450, y, str(purchasereturn_item.quantity))
-                            p.drawString(550, y, str(purchasereturn_item.amount))
+                            p.drawString(300, y, purchasereturn_item.item.name)
+                            p.drawString(560, y, purchasereturn_item.item.code)                   
+                            p.drawString(660, y, str(purchasereturn_item.quantity))
+                            p.drawString(760, y, str(purchasereturn_item.amount))
 
-                            total_amount = total_amount + purchasereturn_item.amount
-
-                    
-
-            y = y - 30
-            p.drawString(450, y, 'Total:')
-            p.drawString(550, y, str(total_amount))
+                            total_amount = total_amount + purchasereturn_item.amount          
+            y = y - 50
+            p.drawString(660, y, 'Total:')
+            p.drawString(760, y, str(total_amount))
 
             p.showPage()
             p.save()
+
         elif report_type == 'vendor':
             vendor_name = request.GET['vendor'] 
             
@@ -981,10 +957,10 @@ class PurchaseReturnReport(View):
             p.setFontSize(13)
             p.drawString(50, 850, "Date")
             p.drawString(150, 850, "Vendor Name")
-            p.drawString(250, 850, "Item Name")
-            p.drawString(350, 850, "Item Code")            
-            p.drawString(450, 850, "Quantity")
-            p.drawString(550, 850, "Amount")
+            p.drawString(330, 850, "Item Name")
+            p.drawString(500, 850, "Item Code")            
+            p.drawString(600, 850, "Quantity")
+            p.drawString(700, 850, "Amount")
              
             y = 850
             total_amount = 0
@@ -1006,25 +982,18 @@ class PurchaseReturnReport(View):
                             p.drawString(50, y, purchasereturn_item.purchase_return.date.strftime('%d/%m/%Y'))
                             p.drawString(150, y, purchasereturn_item.purchase_return.purchase.vendor.user.first_name)
                             p.drawString(250, y, purchasereturn_item.item.name)
-                            p.drawString(350, y, purchasereturn_item.item.code)                   
-                            p.drawString(450, y, str(purchasereturn_item.quantity))
-                            p.drawString(550, y, str(purchasereturn_item.amount))
+                            p.drawString(500, y, purchasereturn_item.item.code)                   
+                            p.drawString(600, y, str(purchasereturn_item.quantity))
+                            p.drawString(700, y, str(purchasereturn_item.amount))
 
                             total_amount = total_amount + purchasereturn_item.amount
-
-                      
-                 
-
-            y = y - 30
-            p.drawString(450, y, 'Total:')
-            p.drawString(550, y, str(total_amount))    
+            y = y - 50
+            p.drawString(600, y, 'Total:')
+            p.drawString(700, y, str(total_amount))    
             p.showPage()
             p.save()
                   
-        return response    
-
-
-            
+        return response                
 
 class ExpenseReport(View):
 
@@ -1236,29 +1205,29 @@ class StockReports(View):
 
         y = 850
         p.drawString(80, y, 'Item Code')
-        p.drawString(160, y, 'Item Name')
-        p.drawString(280, y, 'Barcode')
-        p.drawString(360, y, 'Brand Name')    
-        p.drawString(480, y, 'Stock')
-        p.drawString(540, y, 'UOM')
-        p.drawString(600, y, 'Unit Price')
-        p.drawString(680, y, 'Tax')
-        p.drawString(760, y, 'Discount')
-        p.drawString(840, y, 'Stock By value')
+        p.drawString(180, y, 'Item Name')
+        p.drawString(440, y, 'Barcode')
+        p.drawString(530, y, 'Brand Name')    
+        p.drawString(640, y, 'Stock')
+        p.drawString(700, y, 'UOM')
+        p.drawString(770, y, 'Unit Price')
+        p.drawString(850, y, 'Tax')
+        # p.drawString(760, y, 'Discount')
+        p.drawString(910, y, 'Stock By value')
         
         y = y - 50 
         if len(stocks) > 0:
             for stock in stocks:
                 p.drawString(80, y, stock.item.code)
-                p.drawString(160, y, stock.item.name)
-                p.drawString(280, y, stock.item.barcode)
-                p.drawString(360, y, stock.item.brand.brand)                
-                p.drawString(480, y, str(stock.quantity))
-                p.drawString(540, y, stock.item.uom.uom)
-                p.drawString(600, y, str(stock.unit_price))
-                p.drawString(680, y, str(stock.item.tax))
-                p.drawString(760, y, str(stock.discount_permit_percentage))
-                p.drawString(840, y, str(stock.quantity * stock.unit_price))
+                p.drawString(145, y, stock.item.name)
+                p.drawString(440, y, stock.item.barcode)
+                p.drawString(530, y, stock.item.brand.brand)                
+                p.drawString(640, y, str(stock.quantity))
+                p.drawString(700, y, stock.item.uom.uom)
+                p.drawString(770, y, str(stock.unit_price))
+                p.drawString(850, y, str(stock.item.tax))
+                # p.drawString(760, y, str(stock.discount_permit_percentage))
+                p.drawString(910, y, str(stock.quantity * stock.unit_price))
                 y = y - 30
                 if y <= 270:
                     y = 850
@@ -1267,6 +1236,3 @@ class StockReports(View):
         p.showPage()
         p.save()
         return response
-
-
-

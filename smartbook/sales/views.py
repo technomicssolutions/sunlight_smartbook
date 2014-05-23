@@ -93,8 +93,8 @@ class SalesEntry(View):
             inventory, created = Inventory.objects.get_or_create(item=item)
             inventory.quantity = int(sales_item["current_stock"])
             inventory.save()
-            if sales_created:
 
+            if sales_created:
                 inventory.quantity = inventory.quantity - int(sales_item['qty_sold'])
             else:
                 inventory.quantity = inventory.quantity + s_item.quantity_sold - int(sales_item['qty_sold'])      
@@ -197,9 +197,8 @@ class SalesDetails(View):
                         'uom': item.item.uom.uom,
                         'quantity_sold': item.quantity_sold,
                         'discount_given': item.discount_given,
-
-
                     })
+
                 sales_dict = {
                     'invoice_number': sales.sales_invoice_number,
                     'sales_invoice_date': sales.sales_invoice_date.strftime('%d/%m/%Y'),
@@ -1257,13 +1256,11 @@ class ReceiptVoucherCreation(View):
             customer = Customer.objects.get(customer_name=receiptvoucher['customer'])
             receipt_voucher.customer = customer
             receipt_voucher.save()
-
            
             res = {
                 'result': 'OK',
                 'receiptvoucher_id': receipt_voucher.id,
-            }
-
+            }            
             response = simplejson.dumps(res)
 
             return HttpResponse(response, status=200, mimetype='application/json')         
@@ -1271,9 +1268,7 @@ class ReceiptVoucherCreation(View):
        
 class InvoiceDetails(View):
 
-
     def get(self, request, *args, **kwargs):
-
 
         invoice_no = request.GET.get('invoice_no', '')
         sales_invoice_details = SalesInvoice.objects.filter(invoice_no__istartswith=invoice_no, is_processed=False)
