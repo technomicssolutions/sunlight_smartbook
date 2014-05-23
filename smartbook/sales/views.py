@@ -529,7 +529,6 @@ class CreateQuotationPdf(View):
         i = i + 1
 
         for q_item in quotation.quotationitem_set.all():   
-            print y
             if y <= 215:
                 path = settings.PROJECT_ROOT.replace("\\", "/")+"/quotation_header/Footer.jpg"
                 p.drawImage(path, 7*cm, 5, width=20*cm, preserveAspectRatio=True)
@@ -661,7 +660,6 @@ class CreateDeliveryNote(View):
         return render(request, 'sales/create_delivery_note.html', context)
 
     def post(self, request, *args, **kwargs):
-
         if request.is_ajax():
             quotation_details = ast.literal_eval(request.POST['quotation'])
             delivery_note_details = ast.literal_eval(request.POST['delivery_note'])
@@ -723,10 +721,8 @@ class CreateDeliveryNote(View):
             return HttpResponse(response, status=200, mimetype='application/json')
 
 class QuotationDetails(View):
-
     def get(self, request, *args, **kwargs):
-
-        
+       
         in_sales_invoice_creation = ''
         sales_invoice_creation = request.GET.get('sales_invoice', '')
         whole_quotations = request.GET.get('whole_quotations', '')
@@ -744,7 +740,6 @@ class QuotationDetails(View):
             i = i + 1
             if quotation.deliverynote_set.all().count() > 0:
                 delivery_note = quotation.deliverynote_set.all()[0]
-
                 for q_item in delivery_note.deliverynoteitem_set.all():
                     item_list.append({
                         'sl_no': i,
@@ -762,7 +757,6 @@ class QuotationDetails(View):
                         'discount_given': q_item.discount,
                     })
                     i = i + 1 
-
             if quotation.quotationitem_set.all().count() > 0:
                 for q_item in quotation.quotationitem_set.all():
                     item_list.append({
@@ -797,7 +791,6 @@ class QuotationDetails(View):
                 'delivery_no': quotation.deliverynote_set.all()[0].delivery_note_number if quotation.deliverynote_set.all().count() > 0 else 0,
                 'lpo_number': quotation.deliverynote_set.all()[0].lpo_number if quotation.deliverynote_set.all().count() > 0 else '',
             })
-
         res = {
             'quotations': quotation_list,
             'result': 'ok',

@@ -121,11 +121,11 @@ class SalesReports(View):
                             qty = item.quantity_sold
                             item_name = item.item.name
                             inventorys = item.item.inventory_set.all()
+                            inventory = inventorys[0]                                
                             selling_price = 0  
                             if item.selling_price:
                                 selling_price = item.selling_price
                             else:
-                                inventory = inventorys[0]                            
                                 selling_price = inventory.selling_price                           	
 
                             purchases = item.item.purchaseitem_set.all()
@@ -137,8 +137,8 @@ class SalesReports(View):
                                 avg_cp = cost_price/i 
 
                             total = selling_price * qty
-                            # profit = (selling_price - avg_cp)*qty
-                            profit = round(((selling_price - avg_cp)*qty) - discount,0)
+                            profit = inventory.selling_price - inventory.unit_price
+                            #profit = round(((selling_price - avg_cp)*qty) - discount,0)
                             avg_cp = math.ceil(avg_cp*100)/100                           
                             grant_total = grant_total + total
                             total_profit = total_profit + profit
@@ -254,7 +254,7 @@ class SalesReports(View):
                             avg_cp = cost_price/i
                         total = selling_price * total_qty
                         # profit = (selling_price - avg_cp)*total_qty
-                        profit = round(((selling_price - avg_cp)*total_qty) - discount,0)
+                        profit = inventory.selling_price - inventory.unit_price
 
                         total_profit = total_profit + profit
                         total_discount = total_discount + discount
@@ -333,7 +333,7 @@ class SalesReports(View):
                 start_date = datetime.strptime(start, '%d/%m/%Y')
                 end_date = datetime.strptime(end, '%d/%m/%Y')
 
-                p.drawString(350, 900, 'Customer Wise Sales Report')
+                p.drawString(350, 900, 'Customer Wise Sales Report - '+customer_name)
                 p.setFontSize(13)
                 p.drawString(50, 875, "Date")
                 p.drawString(130, 875, "Invoice Number")
@@ -375,7 +375,7 @@ class SalesReports(View):
                                 avg_cp = cost_price/i
                             # profit = (selling_price - avg_cp)*qty
                            
-                            profit = math.ceil((selling_price - avg_cp)*qty) - float(discount)
+                            profit = inventory.selling_price - inventory.unit_price
 
                             total_profit = total_profit + profit
                             total_discount = total_discount + discount                            
@@ -496,7 +496,7 @@ class SalesReports(View):
                                     i = i + 1
                                 avg_cp = cost_price/i
                             # profit = (selling_price - avg_cp)*qty
-                            profit = round(((selling_price - avg_cp)*qty) - discount,0)
+                            profit = inventory.selling_price - inventory.unit_price
 
                             total_profit = total_profit + profit
                             total_discount = total_discount + discount                            
