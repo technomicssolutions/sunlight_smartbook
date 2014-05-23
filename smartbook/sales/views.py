@@ -414,8 +414,9 @@ class CreateQuotationPdf(View):
         try:
             owner_company = OwnerCompany.objects.latest('id')
             if owner_company.logo:
+                print "30*cm", 30*cm, cm
                 path = settings.PROJECT_ROOT.replace("\\", "/")+"/media/"+owner_company.logo.name
-                p.drawImage(path, 7*cm, 30*cm, width=20*cm, preserveAspectRatio=True)
+                p.drawImage(path, 7*cm, 27*cm, width=20*cm, preserveAspectRatio=True)
         except:
             pass
 
@@ -528,105 +529,73 @@ class CreateQuotationPdf(View):
         i = i + 1
 
         for q_item in quotation.quotationitem_set.all():   
-
-            if y <= 135:
+            print y
+            if y <= 215:
+                path = settings.PROJECT_ROOT.replace("\\", "/")+"/quotation_header/Footer.jpg"
+                p.drawImage(path, 7*cm, 5, width=20*cm, preserveAspectRatio=True)
                 p.showPage()
                 y = 915          
 
             y = y-40
 
-            # data1=[[i, q_item.item.name, q_item.quantity_sold, q_item.item.inventory_set.all()[0].selling_price, q_item.net_amount]]
-            # table = Table(data1, colWidths=[100, 350, 100, 125, 125], rowHeights=40, style = style)
-            # table.setStyle(TableStyle([
-            #                            # ('INNERGRID', (0,0), (0,0), 0.25, colors.black),
-            #                            # ('INNERGRID', (0,1), (-1,-1), 0.25, colors.black),
-            #                            ('BOX', (0,0), (-1,-1), 0.25, colors.black),
-            #                            ('VALIGN',(0,-1),(-1,-1),'MIDDLE'),
-            #                            # ('ALIGN', (0,0), (-1,-1),'RIGHT'),
-            #                            # ('SPACEBELOW', (0,0), (-1,-1), 10),
-            #                            # ('BACKGROUND',(0,0),(1,0),colors.lightgrey)
-            #                            ]))
-            # # table.wrapOn(p, 300, 200)
-            # table.wrapOn(p, 200, 400)
-            # # table.drawOn(p,105,460)
-            # table.drawOn(p,105, x)
-
-
             data1=[[i]]
             table = Table(data1, colWidths=[100], rowHeights=40, style = style)
             table.setStyle(TableStyle([                                      
-                                       # ('INNERGRID', (0,1), (-1,-1), 0.25, colors.black),
                                        ('BOX', (0,0), (-1,-1), 0.25, colors.black),
                                        ('VALIGN',(0,-1),(-1,-1),'MIDDLE'),
                                        ('ALIGN', (0,0), (-1,-1),'CENTRE'),
                                        ]))
-            # table.wrapOn(p, 300, 200)
             table.wrapOn(p, 200, 400)
-            # table.drawOn(p,105,460)
             table.drawOn(p,105, y)
 
 
             data1=[[q_item.item.name]]
             table = Table(data1, colWidths=[350], rowHeights=40, style = style)
             table.setStyle(TableStyle([
-                                       # ('INNERGRID', (0,1), (-1,-1), 0.25, colors.black),
                                        ('BOX', (0,0), (-1,-1), 0.25, colors.black),
                                        ('VALIGN',(0,-1),(-1,-1),'MIDDLE'),
                                        ]))
-            # table.wrapOn(p, 300, 200)
             table.wrapOn(p, 200, 400)
-            # table.drawOn(p,105,460)
             table.drawOn(p,205, y)
-
 
             data1=[[q_item.quantity_sold]]
             table = Table(data1, colWidths=[100], rowHeights=40, style = style)
             table.setStyle(TableStyle([
-                                       # ('INNERGRID', (0,1), (-1,-1), 0.25, colors.black),
                                        ('BOX', (0,0), (-1,-1), 0.25, colors.black),
                                        ('VALIGN',(0,-1),(-1,-1),'MIDDLE'),
                                        ('ALIGN', (0,0), (-1,-1),'CENTRE'),
                                        ]))
-            # table.wrapOn(p, 300, 200)
             table.wrapOn(p, 200, 400)
-            # table.drawOn(p,105,460)
             table.drawOn(p,555, y)
             
             data1=[[q_item.selling_price]]
             table = Table(data1, colWidths=[125], rowHeights=40, style = style)
             table.setStyle(TableStyle([
-                                       # ('INNERGRID', (0,1), (-1,-1), 0.25, colors.black),
                                        ('BOX', (0,0), (-1,-1), 0.25, colors.black),
                                        ('VALIGN',(0,-1),(-1,-1),'MIDDLE'),
                                        ('ALIGN', (0,0), (-1,-1),'RIGHT'),
                                        ]))
-            # table.wrapOn(p, 300, 200)
             table.wrapOn(p, 200, 400)
-            # table.drawOn(p,105,460)
             table.drawOn(p,655, y)
 
             data1=[[q_item.net_amount]]
             table = Table(data1, colWidths=[135], rowHeights=40, style = style)
             table.setStyle(TableStyle([
-                                       # ('INNERGRID', (0,1), (-1,-1), 0.25, colors.black),
                                        ('BOX', (0,0), (-1,-1), 0.25, colors.black),
                                        ('VALIGN',(0,-1),(-1,-1),'MIDDLE'),
                                        ('ALIGN', (0,0), (-1,-1),'RIGHT'),
                                        ]))
-            # table.wrapOn(p, 300, 200)
             table.wrapOn(p, 200, 400)
-            # table.drawOn(p,105,460)
             table.drawOn(p,780, y)
 
             i = i + 1
 
-        total_amount_in_words = num2words(q_item.net_amount).title() + ' Only'            
+        total_amount_in_words = num2words(quotation.net_total).title() + ' Only'            
 
         data=[[total_amount_in_words]]
 
         table = Table(data, colWidths=[675], rowHeights=40, style = style)
         table.setStyle(TableStyle([
-                                   # ('INNERGRID', (0,1), (-1,-1), 0.25, colors.black),
                                    ('BOX', (0,0), (-1,-1), 0.25, colors.black),
                                    ('VALIGN',(0,-1),(-1,-1),'MIDDLE'),
                                    ('ALIGN', (0,0), (-1,-1),'CENTRE'),
@@ -638,7 +607,6 @@ class CreateQuotationPdf(View):
 
         table = Table(data, colWidths=[135], rowHeights=40, style = style)
         table.setStyle(TableStyle([
-                                   # ('INNERGRID', (0,1), (-1,-1), 0.25, colors.black),
                                    ('BOX', (0,0), (-1,-1), 0.25, colors.black),
                                    ('VALIGN',(0,-1),(-1,-1),'MIDDLE'),
                                    ('ALIGN', (0,0), (-1,-1),'RIGHT'),
@@ -648,38 +616,22 @@ class CreateQuotationPdf(View):
 
 
         p.setFont("Helvetica", 15)
-        if y <= 135:
+        if y <= 200:
             p.showPage()
             y = 915
-        p.drawString(110, y-100, "Hope the above quoted prices will meet your satisfaction and for further information please do not hesitate to contact us.")
-        p.drawString(110, y-140, "Delivery     : " + str(quotation.delivery))
-        p.drawString(110, y-160, "Proof          : " + str(quotation.proof))
-        p.drawString(110, y-180, "Payment    : " + str(quotation.payment))
-        p.drawString(110, y-200, "Validity       : " + str(quotation.validity))
-        p.drawString(110, y-270, "For")
-        p.drawString(110, y-290, "Sunlight Stationary")
-        p.drawString(110, y-350, "Authorized Signatory")
-        p.drawString(700, y-350, "Prepared By")
-        
-        # if x >= 270:
-        # p.drawString(110, 150, "For")
-        # p.drawString(110, 130, "Sunlight Stationary")
-        # p.drawString(110, 70, "Authorized Signatory")
-        # p.drawString(700, 70, "Prepared By")
-        # else:           
-        #     
-
-
-        # data=[['Tel: +971-2-6763571, Fax : +971-2-6763581,P.O.Box : 48296, Abu Dhabi, United Arab Emirates']]
-        # table = Table(data, colWidths=[700], rowHeights=30)
-        # table.setStyle(TableStyle([
-        #                            # ('BOX', (0,0), (-1,-1), 0.25, colors.black),   
-        #                            ('ALIGN',(0,0), (-1,-1),'CENTRE'),                                    
-        #                            ]))
-       
-        # table.wrapOn(p, 200, 400)
-        # table.drawOn(p,160, 50)
-
+        y=320
+        var = 25
+        p.drawString(110, y, "Hope the above quoted prices will meet your satisfaction and for further information please do not hesitate to contact us.")
+        p.drawString(110, y-var, "Delivery     : " + str(quotation.delivery))
+        p.drawString(110, y-(var*2), "Proof          : " + str(quotation.proof))
+        p.drawString(110, y-(var*3), "Payment    : " + str(quotation.payment))
+        p.drawString(110, y-(var*4), "Validity       : " + str(quotation.validity))
+        p.drawString(110, y-(var*5), "For")
+        p.drawString(110, y-(var*6), "Sunlight Stationary")
+        p.drawString(110, y-(var*7), "Authorized Signatory")
+        p.drawString(700, y-(var*7), "Prepared By")
+        path = settings.PROJECT_ROOT.replace("\\", "/")+"/quotation_header/Footer.jpg"
+        p.drawImage(path, 7*cm, 5, width=20*cm, preserveAspectRatio=True)
         p.showPage()
         p.save()
         return response
