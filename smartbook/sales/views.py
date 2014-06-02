@@ -734,7 +734,7 @@ class QuotationDetails(View):
             i = i + 1
             if quotation.deliverynote_set.all().count() > 0:
                 delivery_note = quotation.deliverynote_set.all()[0]
-                for q_item in delivery_note.deliverynoteitem_set.all():
+                for q_item in delivery_note.deliverynoteitem_set.all().order_by('id'):
                     item_list.append({
                         'sl_no': i,
                         'item_name': q_item.item.name,
@@ -752,7 +752,7 @@ class QuotationDetails(View):
                     })
                     i = i + 1 
             if quotation.quotationitem_set.all().count() > 0:
-                for q_item in quotation.quotationitem_set.all():
+                for q_item in quotation.quotationitem_set.all().order_by('id'):
                     item_list.append({
                         'sl_no': i,
                         'item_name': q_item.item.name,
@@ -812,7 +812,7 @@ class DeliveryNoteDetails(View):
             i = i + 1
             item_list = []
             if delivery_note.quotation:
-                for q_item in delivery_note.quotation.quotationitem_set.all():
+                for q_item in delivery_note.quotation.quotationitem_set.all().order_by('id'):
                         item_list.append({
                             'sl_no': i,
                             'item_name': q_item.item.name,
@@ -830,7 +830,7 @@ class DeliveryNoteDetails(View):
                         })
                         i = i + 1
             if delivery_note.deliverynoteitem_set.all().count() > 0:  
-                for delivery_note_item in delivery_note.deliverynoteitem_set.all():
+                for delivery_note_item in delivery_note.deliverynoteitem_set.all().order_by('id'):
                     item_list.append({
                         'sl_no': i,
                         'item_name': delivery_note_item.item.name,
@@ -1226,7 +1226,7 @@ class InvoiceDetails(View):
         if invoices.count() > 0:
             for sales_invoice in invoices:
                 net_amount = 0
-                for sale in sales_invoice.sales.salesitem_set.all():
+                for sale in sales_invoice.sales.salesitem_set.all().order_by('id'):
                     net_amount = float(sale.selling_price) * int(sale.quantity_sold)
                     ctx_sales_item.append({
                         'sl_no': i,
