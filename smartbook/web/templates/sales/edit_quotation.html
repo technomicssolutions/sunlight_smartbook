@@ -13,7 +13,7 @@
 {% block content %}
 
 	<div id="main-title">
-		<div class="alert alert-info" align="Center"><h4>Create Quotation</h4></div>
+		<div class="alert alert-info" align="Center"><h4>Edit Quotation</h4></div>
 	</div>
 
 	<div class="sales_form_container">
@@ -169,6 +169,7 @@
 							<span> Item Name </span>
 							<span> Barcode </span>
 							<span> Current Stock </span>
+							<span> UOM </span>
 							<span> Unit Price </span>
 							<span> Qty  </span>		
 							<span> Net Amount </span>
@@ -180,6 +181,7 @@
 							<span>[[item.item_name]] </span>
 							<span>[[item.barcode]] </span>
 							<span><input type="text" ng-model="item.current_stock" /> </span>
+							<span>[[item.uom]]</span>
 							<span><input type="text" ng-model="item.unit_price" ng-change="calculate_net_amount_sale(item)" /> </span>
 							<span> <input type="text" ng-model="item.qty_sold" ng-change="calculate_net_amount_sale(item)" /> </span> 
 							
