@@ -44,8 +44,9 @@ from reportlab.lib.units import inch
 from reportlab.pdfgen import canvas
 from django.http import HttpResponse
 
-def header(canvas, invoice_no):
+def header(canvas, sales_invoice):
 
+        p = canvas
         style = [
             ('FONTSIZE', (0,0), (-1, -1), 20),
             ('FONTNAME',(0,0),(-1,-1),'Helvetica') 
@@ -61,12 +62,37 @@ def header(canvas, invoice_no):
         para_style.fontName = 'Helvetica'
         para = Paragraph('<b> INVOICE </b>', para_style)
 
-        data =[['', '', para , invoice_no]]
+        data =[['', sales_invoice.date.strftime('%d-%m-%Y'), para , sales_invoice.invoice_no]]
         
         table = Table(data, colWidths=[30, 360, 420, 100], rowHeights=50, style=style) 
-        table.wrapOn(canvas, 200, 400)
-        table.drawOn(canvas,50, 975)
+        table.wrapOn(p, 200, 400)
+        table.drawOn(p,50, 975)
 
+        quotation = sales_invoice.quotation
+
+        customer_name = ''
+        if sales_invoice.customer:
+            customer_name = sales_invoice.customer.customer_name
+
+        data=[['', customer_name, sales_invoice.sales.lpo_number if sales_invoice.sales else '' ]]
+
+        table = Table(data, colWidths=[30, 540, 60], rowHeights=30, style = style)      
+        table.wrapOn(p, 200, 400)
+        table.drawOn(p, 50, 935)
+
+        data=[['', '', sales_invoice.date.strftime('%d-%m-%Y')]]
+
+        table = Table(data, colWidths=[450, 120, 70], rowHeights=50, style = style)      
+
+        table.wrapOn(p, 200, 400)
+        table.drawOn(p,50, 910)
+
+        if sales_invoice.quotation or sales_invoice.delivery_note:            
+            data=[['', '', sales_invoice.delivery_note.delivery_note_number if sales_invoice.delivery_note else sales_invoice.quotation.reference_id]]
+
+            table = Table(data, colWidths=[450, 120, 70], rowHeights=40, style = style)      
+            table.wrapOn(p, 200, 400)
+            table.drawOn(p,50, 880)
         return canvas
 
 class SalesEntry(View):
@@ -1146,7 +1172,7 @@ class CreateSalesInvoicePDF(View):
             if y <= 70:
                 y = 760
                 p.showPage()
-                p = header(p, sales_invoice.invoice_no)
+                p = header(p, sales_invoice)
             
             item_price = s_item.selling_price
             total_amount = total_amount + (item_price*s_item.quantity_sold)
@@ -1160,7 +1186,7 @@ class CreateSalesInvoicePDF(View):
         if y <= 70:
             y = 760
             p.showPage()
-            p = header(p,sales_invoice.invoice_no)
+            p = header(p,sales_invoice)
         total_amount = sales.net_amount
         try:
             total_amount = total_amount.quantize(TWOPLACES)
