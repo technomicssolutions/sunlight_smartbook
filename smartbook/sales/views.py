@@ -44,6 +44,31 @@ from reportlab.lib.units import inch
 from reportlab.pdfgen import canvas
 from django.http import HttpResponse
 
+def header(canvas, invoice_no):
+
+        style = [
+            ('FONTSIZE', (0,0), (-1, -1), 20),
+            ('FONTNAME',(0,0),(-1,-1),'Helvetica') 
+        ]
+
+        new_style = [
+            ('FONTSIZE', (0,0), (-1, -1), 30),
+            ('FONTNAME',(0,0),(-1,-1),'Helvetica') 
+        ]
+
+        para_style = ParagraphStyle('fancy')
+        para_style.fontSize = 20
+        para_style.fontName = 'Helvetica'
+        para = Paragraph('<b> INVOICE </b>', para_style)
+
+        data =[['', '', para , invoice_no]]
+        
+        table = Table(data, colWidths=[30, 360, 420, 100], rowHeights=50, style=style) 
+        table.wrapOn(canvas, 200, 400)
+        table.drawOn(canvas,50, 975)
+
+        return canvas
+
 class SalesEntry(View):
     def get(self, request, *args, **kwargs):
         
@@ -1121,6 +1146,7 @@ class CreateSalesInvoicePDF(View):
             if y <= 70:
                 y = 760
                 p.showPage()
+                p = header(p, sales_invoice.invoice_no)
             
             item_price = s_item.selling_price
             total_amount = total_amount + (item_price*s_item.quantity_sold)
@@ -1134,6 +1160,7 @@ class CreateSalesInvoicePDF(View):
         if y <= 70:
             y = 760
             p.showPage()
+            p = header(p,sales_invoice.invoice_no)
         total_amount = sales.net_amount
         try:
             total_amount = total_amount.quantize(TWOPLACES)
