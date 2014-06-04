@@ -95,6 +95,59 @@ def header(canvas, sales_invoice):
             table.drawOn(p,50, 880)
         return canvas
 
+def delivery_note_header(canvas, delivery_note):
+
+        p = canvas
+        y = 1100
+        style = [
+            ('FONTSIZE', (0,0), (-1, -1), 20),
+            ('FONTNAME',(0,0),(-1,-1),'Helvetica') 
+        ]
+
+        new_style = [
+            ('FONTSIZE', (0,0), (-1, -1), 30),
+            ('FONTNAME',(0,0),(-1,-1),'Helvetica') 
+        ]
+
+        para_style = ParagraphStyle('fancy')
+        para_style.fontSize = 20
+        para_style.fontName = 'Helvetica'
+        para = Paragraph('<b> DELIVERY NOTE </b>', para_style)
+
+        data =[['', delivery_note.date.strftime('%d-%m-%Y'), para , delivery_note.delivery_note_number]]
+        
+        table = Table(data, colWidths=[30, 360, 420, 100], rowHeights=50, style=style) 
+     
+        table.wrapOn(p, 200, 400)
+        table.drawOn(p,50, 980)
+
+        quotation = delivery_note.quotation
+
+        customer_name = ''
+        if delivery_note.customer:
+            customer_name = delivery_note.customer.customer_name
+
+        data=[['', customer_name, delivery_note.lpo_number if delivery_note.lpo_number else '' ]]
+
+        table = Table(data, colWidths=[30, 540, 60], rowHeights=30, style = style)      
+        table.wrapOn(p, 200, 400)
+        table.drawOn(p, 50, 940)
+
+        data=[['', '', delivery_note.date.strftime('%d-%m-%Y')]]
+
+        table = Table(data, colWidths=[450, 120, 70], rowHeights=50, style = style)      
+
+        table.wrapOn(p, 200, 400)
+        table.drawOn(p,50, 915)
+
+        if delivery_note.quotation:            
+            data=[['', '', delivery_note.quotation.reference_id]]
+
+            table = Table(data, colWidths=[450, 120, 70], rowHeights=40, style = style)      
+            table.wrapOn(p, 200, 400)
+            table.drawOn(p,50, 885)
+        return p
+
 class SalesEntry(View):
     def get(self, request, *args, **kwargs):
         
@@ -414,6 +467,7 @@ class DeliveryNotePDF(View):
                 if y <= 70:
                     y = 760
                     p.showPage()
+                    p = delivery_note_header(p, delivery_note)
 
                 data1 = [[i, q_item.item.code, q_item.item.name, q_item.quantity_sold, q_item.item.uom.uom]]
                 table = Table(data1, colWidths=[80, 120, 400, 90, 100], rowHeights=40, style = style)
@@ -426,6 +480,7 @@ class DeliveryNotePDF(View):
                 if y <= 70:
                     y = 760
                     p.showPage()
+                    p = delivery_note_header(p, delivery_note)
 
                 data1 = [[i, delivery_item.item.code, delivery_item.item.name, delivery_item.quantity_sold, delivery_item.item.uom.uom]]
                 table = Table(data1, colWidths=[80, 120, 400, 90, 100], rowHeights=40, style = style)
