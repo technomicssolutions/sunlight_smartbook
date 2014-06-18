@@ -48,7 +48,7 @@ class QuotationItem(models.Model):
     quantity_sold = models.IntegerField('Quantity Sold', default=0)
     discount = models.DecimalField('Total Discount',max_digits=14, decimal_places=2, default=0)  
     selling_price = models.DecimalField('Selling Price', max_digits=14, decimal_places=2, default=0)
-
+    uom = models.CharField('Uom', max_length=20, null=True, blank=True)
     def __unicode__(self):
 
         return str(self.quotation.reference_id)
@@ -88,7 +88,8 @@ class DeliveryNoteItem(models.Model):
     net_amount = models.DecimalField('Net Amount', max_digits=14, decimal_places=2, default=0)
     quantity_sold = models.IntegerField('Quantity Sold', default=0)
     discount = models.DecimalField('Total Discount', max_digits=14, decimal_places=2, default=0)
-
+    uom = models.CharField('Uom', max_length=20, null=True, blank=True)
+    
     def __unicode__(self):
 
         return str(self.delivery_note.delivery_note_number)
@@ -155,7 +156,7 @@ class SalesItem(models.Model):
     discount_given = models.DecimalField('Discount Given',max_digits=14, decimal_places=2, default=0)  
     selling_price = models.DecimalField('Selling Price', max_digits=14, decimal_places=2, default=0) 
     net_amount = models.DecimalField('Sold Net Amount', max_digits=14, decimal_places=2, default=0)
-    
+    uom = models.CharField('Uom', max_length=20, null=True, blank=True)
     
     def __unicode__(self):
 

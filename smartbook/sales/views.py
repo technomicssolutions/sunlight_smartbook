@@ -211,6 +211,7 @@ class SalesEntry(View):
             s_item.discount_given = sales_item['disc_given']
             s_item.net_amount = sales_item['net_amount']
             s_item.selling_price = sales_item['unit_price']
+            s_item.uom = sales_item['uom']
             s_item.save()
 
         sales_invoice, created = SalesInvoice.objects.get_or_create(sales=sales)
@@ -381,6 +382,7 @@ class CreateQuotation(View):
                 quotation_item_obj.net_amount = float(quotation_item['net_amount'])
                 quotation_item_obj.quantity_sold = int(quotation_item['qty_sold'])
                 quotation_item_obj.selling_price = float(quotation_item['unit_price'])
+                quotation_item_obj.uom = quotation_item['uom']
                 quotation_item_obj.save()
             res = {
                 'result': 'OK',
@@ -469,7 +471,7 @@ class DeliveryNotePDF(View):
                     p.showPage()
                     p = delivery_note_header(p, delivery_note)
 
-                data1 = [[i, q_item.item.code, q_item.item.name, q_item.quantity_sold, q_item.item.uom.uom]]
+                data1 = [[i, q_item.item.code, q_item.item.name, q_item.quantity_sold, q_item.uom if q_item.uom else q_item.item.uom.uom]]
                 table = Table(data1, colWidths=[80, 120, 400, 90, 100], rowHeights=40, style = style)
                 table.wrapOn(p, 200, 600)
                 table.drawOn(p, 20, y)
@@ -849,7 +851,7 @@ class QuotationDetails(View):
                         'item_description': q_item.item.description,
                         'qty_sold': q_item.quantity_sold,
                         'tax': q_item.item.tax,
-                        'uom': q_item.item.uom.uom,
+                        'uom': q_item.uom if q_item.uom else q_item.item.uom.uom,
                         'current_stock': q_item.item.inventory_set.all()[0].quantity if q_item.item.inventory_set.count() > 0  else 0 ,
                         'selling_price': q_item.item.inventory_set.all()[0].selling_price if q_item.item.inventory_set.count() > 0 else 0 ,
                         'discount_permit': q_item.item.inventory_set.all()[0].discount_permit_percentage if q_item.item.inventory_set.count() > 0 else 0,
@@ -867,7 +869,7 @@ class QuotationDetails(View):
                         'item_description': q_item.item.description,
                         'qty_sold': q_item.quantity_sold,
                         'tax': q_item.item.tax,
-                        'uom': q_item.item.uom.uom,
+                        'uom': q_item.uom if q_item.uom else q_item.item.uom.uom,
                         'current_stock': q_item.item.inventory_set.all()[0].quantity if q_item.item.inventory_set.count() > 0  else 0 ,
                         'selling_price': q_item.item.inventory_set.all()[0].selling_price if q_item.item.inventory_set.count() > 0 else 0 ,
                         'discount_permit': q_item.item.inventory_set.all()[0].discount_permit_percentage if q_item.item.inventory_set.count() > 0 else 0,
@@ -927,7 +929,7 @@ class DeliveryNoteDetails(View):
                             'item_description': q_item.item.description,
                             'qty_sold': q_item.quantity_sold,
                             'tax': q_item.item.tax,
-                            'uom': q_item.item.uom.uom,
+                            'uom': q_item.uom if q_item.uom else q_item.item.uom.uom,
                             'current_stock': q_item.item.inventory_set.all()[0].quantity if q_item.item.inventory_set.count() > 0  else 0 ,
                             'selling_price': q_item.item.inventory_set.all()[0].selling_price if q_item.item.inventory_set.count() > 0 else 0 ,
                             'discount_permit': q_item.item.inventory_set.all()[0].discount_permit_percentage if q_item.item.inventory_set.count() > 0 else 0,
@@ -1115,6 +1117,7 @@ class QuotationDeliverynoteSales(View):
             s_item.discount_given = sales_item['disc_given']
             s_item.net_amount = sales_item['net_amount']
             s_item.selling_price = sales_item['unit_price']
+            s_item.uom = sales_item['uom']
             # unit price is actually the selling price
             s_item.save()
 
@@ -1232,7 +1235,7 @@ class CreateSalesInvoicePDF(View):
             item_price = s_item.selling_price
             total_amount = total_amount + (item_price*s_item.quantity_sold)
             
-            data1=[[i, s_item.item.code, s_item.item.name, s_item.quantity_sold, s_item.item.uom.uom, s_item.selling_price.quantize(TWOPLACES), s_item.net_amount]]
+            data1=[[i, s_item.item.code, s_item.item.name, s_item.quantity_sold, s_item.uom if s_item.uom else s_item.item.uom.uom, s_item.selling_price.quantize(TWOPLACES), s_item.net_amount]]
             table = Table(data1, colWidths=[50, 100, 440, 80, 90, 100, 50], rowHeights=40, style=style)
             table.wrapOn(p, 200, 400)
             table.drawOn(p,20,y)
@@ -1623,6 +1626,7 @@ class EditSalesInvoice(View):
                     s_item.discount_given = item_data['disc_given']
                     s_item.net_amount = item_data['net_amount']
                     s_item.selling_price = item_data['unit_price']
+                    s_item.uom = item_data['uom']
                     s_item.save()
 
         # Create new sales item for the newly added item
@@ -1647,6 +1651,7 @@ class EditSalesInvoice(View):
                 s_item.discount_given = item_data['disc_given']
                 s_item.net_amount = item_data['net_amount']
                 s_item.selling_price = item_data['unit_price']
+                s_item.uom = item_data['uom']
                 s_item.save()
         if sales.net_amount != sales_invoice_details['net_total']:
             sales.net_amount = sales_invoice_details['net_total']
@@ -1722,6 +1727,7 @@ class EditQuotation(View):
                         q_item.net_amount = float(item_data['net_amount'])
                         q_item.quantity_sold = int(item_data['qty_sold'])
                         q_item.selling_price = float(item_data['unit_price'])
+                        q_item.uom = item_data['uom']
                         q_item.save()
 
             # Create new sales item for the newly added item
@@ -1743,6 +1749,7 @@ class EditQuotation(View):
                     q_item.quantity_sold = item_data['qty_sold']
                     q_item.net_amount = item_data['net_amount']
                     q_item.selling_price = item_data['unit_price']
+                    q_item.uom = item_data['uom']
                     q_item.save()
         
             res = {
