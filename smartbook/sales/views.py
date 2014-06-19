@@ -558,7 +558,7 @@ class CreateQuotationPdf(View):
 
         data=[['Sl.No:']]
 
-        table = Table(data, colWidths=[100], rowHeights=40, style = style1)
+        table = Table(data, colWidths=[75], rowHeights=40, style = style1)
         table.setStyle(TableStyle([                                  
                                    ('BOX', (0,0), (-1,-1), 0.25, colors.black),
                                    ('VALIGN',(0,-1),(-1,-1),'MIDDLE'),
@@ -569,42 +569,53 @@ class CreateQuotationPdf(View):
 
         data=[['Description']]
 
-        table = Table(data, colWidths=[350], rowHeights=40, style = style1)
+        table = Table(data, colWidths=[340], rowHeights=40, style = style1)
         table.setStyle(TableStyle([                                  
                                    ('BOX', (0,0), (-1,-1), 0.25, colors.black),
                                    ('VALIGN',(0,-1),(-1,-1),'MIDDLE'),
                                    ('ALIGN',(0,-1),(-1,-1),'CENTRE'),                                                                    
                                    ]))
         table.wrapOn(p, 200, 400)
-        table.drawOn(p, 205, y-300)
+        table.drawOn(p, 180, y-300)
 
         data=[['Qty']]
 
-        table = Table(data, colWidths=[100], rowHeights=40, style = style1)
+        table = Table(data, colWidths=[75], rowHeights=40, style = style1)
         table.setStyle(TableStyle([                                  
                                    ('BOX', (0,0), (-1,-1), 0.25, colors.black),
                                    ('VALIGN',(0,-1),(-1,-1),'MIDDLE'),
                                    ('ALIGN',(0,-1),(-1,-1),'CENTRE'),                                
                                    ]))
         table.wrapOn(p, 200, 400)
-        table.drawOn(p, 555, y-300)
+        table.drawOn(p, 520, y-300)
+
+        data=[['UOM']]
+
+        table = Table(data, colWidths=[65], rowHeights=40, style = style1)
+        table.setStyle(TableStyle([                                  
+                                   ('BOX', (0,0), (-1,-1), 0.25, colors.black),
+                                   ('VALIGN',(0,-1),(-1,-1),'MIDDLE'),
+                                   ('ALIGN',(0,-1),(-1,-1),'CENTRE'),                                
+                                   ]))
+        table.wrapOn(p, 200, 400)
+        table.drawOn(p, 595, y-300)
 
 
         data=[['Unit Price']]
 
-        table = Table(data, colWidths=[125], rowHeights=40, style = style1)
+        table = Table(data, colWidths=[120], rowHeights=40, style = style1)
         table.setStyle(TableStyle([                                  
                                    ('BOX', (0,0), (-1,-1), 0.25, colors.black),
                                    ('VALIGN',(0,-1),(-1,-1),'MIDDLE'),
                                    ('ALIGN',(0,-1),(-1,-1),'CENTRE'),                                 
                                    ]))
         table.wrapOn(p, 200, 400)
-        table.drawOn(p, 655, y-300)
+        table.drawOn(p, 660, y-300)
 
 
         data=[['Amount(AED)']]
 
-        table = Table(data, colWidths=[135], rowHeights=40, style = style1)
+        table = Table(data, colWidths=[130], rowHeights=40, style = style1)
         table.setStyle(TableStyle([                                  
                                    ('BOX', (0,0), (-1,-1), 0.25, colors.black),
                                    ('VALIGN',(0,-1),(-1,-1),'MIDDLE'),
@@ -628,7 +639,7 @@ class CreateQuotationPdf(View):
                 p.drawImage(path, 70, 1300, width=30*cm, preserveAspectRatio=True)             
             print "y=", y, i              
             data1=[[i]]
-            table = Table(data1, colWidths=[100], rowHeights=40, style = style)
+            table = Table(data1, colWidths=[75], rowHeights=40, style = style)
             table.setStyle(TableStyle([                                      
                                        ('BOX', (0,0), (-1,-1), 0.25, colors.black),
                                        ('VALIGN',(0,-1),(-1,-1),'MIDDLE'),
@@ -639,36 +650,46 @@ class CreateQuotationPdf(View):
 
 
             data1=[[q_item.item.name]]
-            table = Table(data1, colWidths=[350], rowHeights=40, style = style)
+            table = Table(data1, colWidths=[340], rowHeights=40, style = style)
             table.setStyle(TableStyle([
                                        ('BOX', (0,0), (-1,-1), 0.25, colors.black),
                                        ('VALIGN',(0,-1),(-1,-1),'MIDDLE'),
                                        ]))
             table.wrapOn(p, 200, 400)
-            table.drawOn(p, 205, y)
+            table.drawOn(p, 180, y)
 
             data1=[[q_item.quantity_sold]]
-            table = Table(data1, colWidths=[100], rowHeights=40, style = style)
+            table = Table(data1, colWidths=[75], rowHeights=40, style = style)
             table.setStyle(TableStyle([
                                        ('BOX', (0,0), (-1,-1), 0.25, colors.black),
                                        ('VALIGN',(0,-1),(-1,-1),'MIDDLE'),
                                        ('ALIGN', (0,0), (-1,-1),'CENTRE'),
                                        ]))
             table.wrapOn(p, 200, 400)
-            table.drawOn(p, 555, y)
+            table.drawOn(p, 520, y)
+
+            data1=[[q_item.uom if q_item.uom else q_item.item.uom.uom ]]
+            table = Table(data1, colWidths=[65], rowHeights=40, style = style)
+            table.setStyle(TableStyle([
+                                       ('BOX', (0,0), (-1,-1), 0.25, colors.black),
+                                       ('VALIGN',(0,-1),(-1,-1),'MIDDLE'),
+                                       ('ALIGN', (0,0), (-1,-1),'CENTRE'),
+                                       ]))
+            table.wrapOn(p, 200, 400)
+            table.drawOn(p, 595, y)
             
             data1=[[q_item.selling_price]]
-            table = Table(data1, colWidths=[125], rowHeights=40, style = style)
+            table = Table(data1, colWidths=[120], rowHeights=40, style = style)
             table.setStyle(TableStyle([
                                        ('BOX', (0,0), (-1,-1), 0.25, colors.black),
                                        ('VALIGN',(0,-1),(-1,-1),'MIDDLE'),
                                        ('ALIGN', (0,0), (-1,-1),'RIGHT'),
                                        ]))
             table.wrapOn(p, 200, 400)
-            table.drawOn(p, 655, y)
+            table.drawOn(p, 660, y)
 
             data1=[[q_item.net_amount]]
-            table = Table(data1, colWidths=[135], rowHeights=40, style = style)
+            table = Table(data1, colWidths=[130], rowHeights=40, style = style)
             table.setStyle(TableStyle([
                                        ('BOX', (0,0), (-1,-1), 0.25, colors.black),
                                        ('VALIGN',(0,-1),(-1,-1),'MIDDLE'),
