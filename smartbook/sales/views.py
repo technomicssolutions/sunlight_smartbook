@@ -637,7 +637,7 @@ class CreateQuotationPdf(View):
                 y = 1100
                 path = settings.PROJECT_ROOT.replace("\\", "/")+"/quotation_header/Header.jpg"
                 p.drawImage(path, 70, 1300, width=30*cm, preserveAspectRatio=True)             
-            print "y=", y, i              
+                       
             data1=[[i]]
             table = Table(data1, colWidths=[75], rowHeights=40, style = style)
             table.setStyle(TableStyle([                                      
@@ -1048,7 +1048,6 @@ class QuotationDeliverynoteSales(View):
                                 item = q_item.item
                                 inventory, created = Inventory.objects.get_or_create(item=item)
                                 inventory.quantity = int(item_data["current_stock"])
-                                print "inventory.quantity =", inventory.quantity, int(item_data["current_stock"])
                                 inventory.save()
                                 inventory.quantity = inventory.quantity + int(q_item.quantity_sold)
                                 inventory.save()
@@ -1592,7 +1591,6 @@ class DirectDeliveryNote(View):
                 'result': 'ok',
                 'delivery_note_id': delivery_note.id
             }
-            print res
 
             response = simplejson.dumps(res)
 
