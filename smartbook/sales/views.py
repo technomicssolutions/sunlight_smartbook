@@ -1029,7 +1029,7 @@ class QuotationDeliverynoteSales(View):
         sales.save()
         if sales_dict['quotation_ref_no']:
             quotation = Quotation.objects.get(reference_id=sales_dict['quotation_ref_no'])
-            for q_item in quotation.quotationitem_set.all():
+            for q_item in quotation.quotationitem_set.all().order_by('id'):
                 quotation_item_names = []
                 for item_data in sales_dict['sales_items']:
                     quotation_item_names.append(item_data['item_name'])
@@ -1073,7 +1073,7 @@ class QuotationDeliverynoteSales(View):
                 sales.delivery_note = delivery_note
         else:
             delivery_note = DeliveryNote.objects.get(delivery_note_number=sales_dict['delivery_no'])
-            for q_item in delivery_note.deliverynoteitem_set.all():
+            for q_item in delivery_note.deliverynoteitem_set.all().order_by('id'):
                 delivery_note_item_names = []
                 for item_data in sales_dict['sales_items']:
                     delivery_note_item_names.append(item_data['item_name'])
@@ -1245,7 +1245,7 @@ class CreateSalesInvoicePDF(View):
 
         TWOPLACES = Decimal(10) ** -2
         total_amount = 0
-        for s_item in sales.salesitem_set.all():
+        for s_item in sales.salesitem_set.all().order_by('id'):
                    
             y = y-40
             if y <= 70:
