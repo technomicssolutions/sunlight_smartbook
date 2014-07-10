@@ -3759,15 +3759,17 @@ function EditSalesInvoiceController($scope, $element, $location, $http){
     $scope.get_sales_invoice_details = function() {
 
         $scope.invoice_message = '';
-        
-        var invoice_no = $scope.invoice_no;
         $scope.invoices = []
+
+        var invoice_no = $scope.invoice_no;
         $http.get('/sales/invoice_details/?invoice_no='+invoice_no).success(function(data)
         {
             if(data.invoice_details.length > 0){
                 $scope.selecting_invoice = true;
                 $scope.invoice_selected = false;
-                $scope.invoices = data.sales_invoices; 
+                if($scope.invoice_no == data.search_key) {
+                    $scope.invoices = data.sales_invoices;
+                }                 
             } else {
                 $scope.invoice_message = "There is no invoice with this number";
             }
@@ -3787,6 +3789,8 @@ function EditSalesInvoiceController($scope, $element, $location, $http){
     }
 
     $scope.add_invoice = function(invoice) {
+        
+        $scope.invoice_details.sales_items = [];
         $scope.invoice_selected = true;
         $scope.invoice_no = invoice.invoice_no;
         $scope.invoice_details.invoice_no = invoice.invoice_no;
@@ -3821,6 +3825,7 @@ function EditSalesInvoiceController($scope, $element, $location, $http){
                 $scope.invoice_details.sales_items.push(selected_item);
             }
         }
+        console.log($scope.invoice_details);
     }
 
     $scope.remove_from_item_list = function(item) {
@@ -3969,6 +3974,7 @@ function EditSalesInvoiceController($scope, $element, $location, $http){
             if($scope.invoice_details.payment_mode == null) {
                 $scope.invoice_details.payment_mode = 'cash';
             }
+            console.log($scope.invoice_details);
             params = { 
                 'invoice': angular.toJson($scope.invoice_details),
                 "csrfmiddlewaretoken" : $scope.csrf_token
